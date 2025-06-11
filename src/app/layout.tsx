@@ -3,12 +3,18 @@ export const metadata = {
   description: '',
 };
 
+import Navbar from './components/navbar';
 import './globals.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <main className='h-screen'>
+          <Navbar />
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
