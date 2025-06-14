@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export default function Register() {
     const [user, setUser] = React.useState({
@@ -11,14 +12,48 @@ export default function Register() {
         password: '',
     });
     const [ showPassword, setShowPassword ] = React.useState(false);
+    const router = useRouter();
 
-    // const onSubmit = async () => {}
+    const onSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: user.username,
+                    email: user.email,
+                    password: user.password,
+                }),
+            })
+
+            if(response.ok) {
+                toast.success('User registered successfully');
+                router.push('/login');
+            } else {
+                const { message } = await response.json();
+                if ( message === 'user with this email already exists' || message === 'user with this username already exists' ) {
+                    toast.error(message);
+                } else if (message === 'password must be at least 8 characters long, contain uppercase, lowercase, number, and special character.') {
+                    toast.error('Your password is not strong enough')
+                }
+                 else {
+                    toast.error('Failed to register user');
+                }
+            }
+        } catch (error) {
+            toast.error('An error occurred while registering user');
+            console.error('Error during registration:', error);   
+        }
+    }
 
     return (
         <div className='min-h-screen flex items-center justify-center px-4'>
             <div className='text-white w-full max-w-md p-8'>
                 <h1 className='text-3xl font-bold mt-2 mb-10 text-center'>Signup to MFauth</h1>
-                <form className='space-y-4'>
+                <form onSubmit={onSubmit} className='space-y-4'>
                     <input className='w-full px-4 py-3 bg-[#2a2a2a] rounded-md focus:outline-auto focus:ring-2 focus:ring-white' type='text' name='username' placeholder='Username' value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} />
                     <input className='w-full px-4 py-3 bg-[#2a2a2a] rounded-md focus:outline-auto focus:ring-2 focus:ring-white' type='email' name='email' placeholder='Email' value={user.email} onChange={e => setUser({ ...user, email: e.target.value })} />
 
