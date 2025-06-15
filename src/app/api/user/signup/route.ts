@@ -53,6 +53,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ user: rest, message: "user created successfully" }, { status: 201 });
     } catch (error) {
         console.error("Error creating user:", error);
-        return NextResponse.json({ message: "Failed to process request" }, { status: 500 });  
+        return NextResponse.json({ message: "Failed to process request -" + error }, { status: 500 });  
     }
 }
