@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { useRouter }  from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
@@ -13,6 +13,7 @@ export default function Navbar() {
   const [ menuOpen, setMenuOpen ] = useState(false);
   const router = useRouter();
   const [ authenticated, setAuthenticated ] = useState<boolean | null>(null);
+  const [ user, setUser ] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -23,10 +24,27 @@ export default function Navbar() {
     checkAuth();
   });
 
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await fetch('/api/user/session');
+      const data = await response.json();
+      if(data?.user?.username){
+        setUser(data.user.username);
+      }
+    }
+    getUser();
+  }, []);
+  
+  const redirectToProfile = () => {
+    if (user) {
+      router.push(`/profile/${user}`);
+    }
+  };
+
   if (hiddenPaths.includes(pathname)) return null;
 
   const NavLink = ({ href, label }: { href: string; label: string }) => (
-    <Link href={href} className={`text-lg ${pathname === href ? 'text-gray-400 font-semibold' : 'text-white'}`}>
+    <Link href={href} className={`text-lg ${pathname === href ? 'text-gray-400 font-semibold hover:scale-95' : 'text-white hover:scale-105'}`}>
       {label}
     </Link>
   );
@@ -62,10 +80,10 @@ export default function Navbar() {
         </span>
       </h1>
 
-
       <div className='hidden md:flex items-center gap-6'>
         <NavLink href='/' label='Home' />
-        <NavLink href='/profile' label='Profile' />
+        <NavLink href='/settings' label='Settings' />
+        <button onClick={redirectToProfile} className='text-lg cursor-pointer'><User className={`w-6 h-6 ${pathname === `/profile/${user}` ? 'text-gray-400 hover:scale-95' : 'text-white hover:scale-105'}`}/></button>
         { authenticated ?(
           <button onClick={logout} className='bg-gray-500 px-3 py-1 rounded-md text-white text-lg font-semibold hover:ring-2 hover:ring-gray-300 transition-all duration-200'>Logout</button>
         ):(
@@ -82,9 +100,10 @@ export default function Navbar() {
       </div>
 
       { menuOpen && (
-        <div className='absolute gap-2 bg-[#1B1B1B] top-16 left-0 w-full p-4 flex flex-col items-center md:hidden'>
+        <div onClick={() => setMenuOpen(false)} className='absolute gap-2 bg-[#1B1B1B] top-16 left-0 w-full p-4 flex flex-col items-center md:hidden'>
           <NavLink href='/' label='Home' />
-          <NavLink href='/profile' label='Profile' />
+          <NavLink href={`/profile/${user}`} label='Profile' />
+          <NavLink href='/settings' label='Settings' />
           { authenticated ? (
             <button onClick={logout} className='text-lg'>Logout</button>
           ):(
