@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { jwtVerify } from 'jose';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const isPublicPath = path === '/register' || path === '/login';
 
@@ -12,6 +13,19 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/login', request.nextUrl));
     }
 
+    if (path.startsWith('/profile/')) {
+        const username = path.split('/')[2]; 
+        try {
+            const secret = new TextEncoder().encode(process.env.TOKEN_SECRET!);
+            const { payload } = await jwtVerify(token, secret);
+            if (payload.username !== username) {
+                return NextResponse.redirect(new URL('/unauthorized', request.nextUrl));
+            }
+        } catch (error) {
+            console.error('Error processing profile request:', error);
+            return NextResponse.redirect(new URL('/login', request.nextUrl));
+        }
+    }
     return NextResponse.next();
 }
 
@@ -19,6 +33,8 @@ export const config = {
     matcher: [
         '/',
         '/register',
-        '/login'
+        '/login',
+        '/profile/:path*',
+        '/unauthorized',
     ],
 };
