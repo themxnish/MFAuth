@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 body {
-  background-color: #1B1B1B;
+  background: linear-gradient(to bottom, #1B1B1B, #2B2B2B);
 }
 
 input:-webkit-autofill,
