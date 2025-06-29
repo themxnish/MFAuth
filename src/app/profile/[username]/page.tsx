@@ -4,7 +4,9 @@ import { CrossIcon } from "lucide-react"
 import { format } from "date-fns";
 import { LogoutButton } from "@/app/components/logout";
 import { EditProfileButton } from "@/app/components/editProfileButton";
-// import Image from "next/image";
+import { db } from "@/lib/db";
+import ProfileAvatar from "@/app/components/avatar/profileAvatar";
+import AvatarSelector from "@/app/components/avatar/avatar";
 
 type ProfilePageProps = {
   params: { username: string };
@@ -13,8 +15,19 @@ type ProfilePageProps = {
 
 export default async function ProfilePage(props: ProfilePageProps) {
   const params = await props.params;
-
   const user = await getUserFromToken();
+
+  const data = await db.user.findUnique({
+    where: { username: params.username },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+      avatar: true,
+    },
+  });
   
   if (!user) {
     redirect("/login");
@@ -34,14 +47,8 @@ export default async function ProfilePage(props: ProfilePageProps) {
     <div className='min-h-screen flex items-center justify-center px-4'>
       <div className='w-full max-w-xl bg-[#3B3B3B] shadow-xl rounded-xl p-6'>
         <div className='flex items-center gap-4'>
-          <div className='h-24 w-24 rounded-full border-4 border-gray-200 overflow-hidden shadow-lg'>
-            {/* <Image
-              src={user.profilePicture || "/default-profile.png"}
-              alt='Profile'
-              width={96}
-              height={96}
-              className='h-full w-full object-cover'
-            /> */}
+          <div className='h-24 w-24 rounded-full border-5 border-black overflow-hidden shadow-lg'>
+            <ProfileAvatar avatar={typeof data?.avatar === "string" ? JSON.parse(data.avatar) : (data?.avatar ?? null)} />
           </div>
           <div>
             <h1 className='text-2xl font-bold text-white'><span className='text-gray-400 text-lg'>@</span>{user.username}</h1>
@@ -72,6 +79,8 @@ export default async function ProfilePage(props: ProfilePageProps) {
           <div className='p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
             <h2 className='text-md font-semibold text-white mb-2'>2FA Authentication Status</h2>
           </div>
+
+          <AvatarSelector />
 
           <div className=' flex flex-row gap-4 text-center justify-between items-center'>
             <EditProfileButton username={user.username} />

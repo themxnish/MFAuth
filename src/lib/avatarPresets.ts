@@ -1,0 +1,11 @@
+import { AvatarFullConfig } from 'react-nice-avatar';
+
+export const avatarPresets: AvatarFullConfig[] = [
+  { sex: 'man', faceColor: '#F9C9A0', earSize: 'small', hairColor: '#000', hairStyle: 'thick', hatColor: '#F4D150', hatStyle: 'none', eyeStyle: 'circle', glassesStyle: 'none', noseStyle: 'short', mouthStyle: 'smile', shirtStyle: 'short', shirtColor: '#6BD9E9', bgColor: '#FFEDEF', isGradient: true },
+  { sex: 'woman', faceColor: '#C8A2C2', earSize: 'big', hairColor: '#000', hairStyle: 'womanShort', hatColor: '#F4D150', hatStyle: 'none', eyeStyle: 'smile', glassesStyle: 'square', noseStyle: 'round', mouthStyle: 'peace', shirtStyle: 'short', shirtColor: '#F7F7F7', bgColor: '#A8D8D8', isGradient: true },
+  { sex: 'man', faceColor: '#F9C9A0', earSize: 'big', hairColor: '#774F38', hairStyle: 'mohawk', hatColor: '#000', hatStyle: 'none', eyeStyle: 'oval', glassesStyle: 'round', noseStyle: 'long', mouthStyle: 'laugh', shirtStyle: 'polo', shirtColor: '#92CC81', bgColor: '#D2EFF3', isGradient: true },
+  { sex: 'woman', faceColor: '#F9C9A0', earSize: 'small', hairColor: '#D08B5B', hairStyle: 'womanLong', hatColor: '#FFD47E', hatStyle: 'none', eyeStyle: 'circle', glassesStyle: 'none', noseStyle: 'short', mouthStyle: 'smile', shirtStyle: 'short', shirtColor: '#FFB1B1', bgColor: '#FFF5D2', isGradient: true },
+  { sex: 'woman', faceColor: '#AC6651', earSize: 'big', hairColor: '#000', hairStyle: 'normal', hatColor: '#6BD9E9', hatStyle: 'none', eyeStyle: 'oval', glassesStyle: 'square', noseStyle: 'long', mouthStyle: 'laugh', shirtStyle: 'hoody', shirtColor: '#C271B4', bgColor: '#E0BBE4', isGradient: true },
+  { sex: 'man', faceColor: '#F9C9A0', earSize: 'small', hairColor: '#1E1E1E', hairStyle: 'normal', hatColor: '#F4D150', hatStyle: 'beanie', eyeStyle: 'smile', glassesStyle: 'none', noseStyle: 'round', mouthStyle: 'peace', shirtStyle: 'hoody', shirtColor: '#F4F4F4', bgColor: '#C0D6E4', isGradient: true },
+  { sex:'woman', faceColor: '#F9C9A0', earSize: 'big', hairColor: '#AC6651', hairStyle: 'womanShort', hatColor: '#F4D150', hatStyle: 'none', eyeStyle: 'circle', glassesStyle: 'round', noseStyle: 'short', mouthStyle: 'laugh', shirtStyle: 'short', shirtColor: '#F4D150', bgColor: '#E0BBE4', isGradient: true },
+];

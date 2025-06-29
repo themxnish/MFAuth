@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { AvatarFullConfig } from "react-nice-avatar";
 
 export async function getUserFromToken() {
   const cookieStore = await cookies(); 
@@ -14,6 +15,7 @@ export async function getUserFromToken() {
       email: string;
       createdAt?: string;
       updatedAt?: string;
+      avatar?: AvatarFullConfig;
     };
 
     return {
