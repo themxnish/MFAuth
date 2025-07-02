@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { MailOpen, KeySquare, MoveRight, CheckCircle, CheckCheck } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function VerifyEmail() {
   const [ email, setEmail ] = useState('');
@@ -22,6 +23,24 @@ export default function VerifyEmail() {
     redirect('/');
   }
 
+  const sendOTP = async () => {
+    const response = await fetch('/api/user/verification/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if(response.ok){
+      setPage('otp');
+      toast.success('OTP has been sent successfully, check your inbox');
+    } else {
+      const { message } = await response.json();
+      toast.error(message);
+    }
+  }
+
   return (
     <div className='min-h-screen flex flex-col items-center justify-center px-4'>
       <div className='max-w-md w-full px-6 py-10 bg-[#3B3B3C] text-white shadow-xl rounded-xl'>
@@ -33,7 +52,7 @@ export default function VerifyEmail() {
             <MailOpen className='w-16 h-16 text-gray-300 mt-6' />
             <p className='text-md text-gray-300'>Please enter your email address to receive a 4-digit code</p>
             <input className='text-white text-md w-full px-4 py-3 bg-[#4B4B4B] shadow-xl rounded-lg' type='email' name='email' placeholder='abc@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} />
-            <button className='bg-[#4B4B4B] text-white w-1/2 py-3 px-4 rounded-full shadow-xl mt-4 hover:scale-105 cursor-pointer'>
+            <button className='bg-[#4B4B4B] text-white w-1/2 py-3 px-4 rounded-full shadow-xl mt-4 hover:scale-105 cursor-pointer' onClick={sendOTP}>
               <MoveRight className='w-6 h-6 inline-block' />
             </button>
           </div>
