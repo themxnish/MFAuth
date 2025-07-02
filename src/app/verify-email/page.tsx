@@ -41,6 +41,24 @@ export default function VerifyEmail() {
     }
   }
 
+   const verifyOTP = async () => {
+    const response = await fetch('/api/user/verification/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, otp: otpInput.join('') }),
+    });
+
+    if(response.ok){
+      setPage('verified');
+      toast.success('Email verified successfully');
+    } else {
+      const { message } = await response.json();
+      toast.error(message);
+    }
+  }
+
   return (
     <div className='min-h-screen flex flex-col items-center justify-center px-4'>
       <div className='max-w-md w-full px-6 py-10 bg-[#3B3B3C] text-white shadow-xl rounded-xl'>
@@ -71,7 +89,7 @@ export default function VerifyEmail() {
               ))}
             </div>
             <p className='text-sm text-gray-400'>The OTP expires in next 3 minutes</p>
-            <button className='bg-[#4B4B4B] text-white font-semibold w-1/2 py-3 px-4 rounded-full shadow-xl mt-6 hover:scale-105 cursor-pointer'>Verify</button>
+            <button className='bg-[#4B4B4B] text-white font-semibold w-1/2 py-3 px-4 rounded-full shadow-xl mt-6 hover:scale-105 cursor-pointer' onClick={verifyOTP}>Verify</button>
             <p className='text-sm text-gray-400'>Did not receive the code? <span className='text-yellow-300 cursor-pointer' onClick={() => { setPage('email'); setOtpInput(['', '', '', ''])}}>Resend</span></p>
           </div>
         }
