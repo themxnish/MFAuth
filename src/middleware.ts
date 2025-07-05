@@ -4,12 +4,13 @@ import { jwtVerify } from 'jose';
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const isPublicPath = path === '/register' || path === '/login';
+    const isEmailPath = path === '/verify-email';
 
     const token = request.cookies.get('token')?.value || '';
 
     if(isPublicPath && token) {
         return NextResponse.redirect(new URL('/', request.nextUrl));
-    } else if (!isPublicPath && !token) {
+    } else if (!isPublicPath && !token && !isEmailPath) {
         return NextResponse.redirect(new URL('/login', request.nextUrl));
     }
 
@@ -26,6 +27,21 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/login', request.nextUrl));
         }
     }
+
+    if (isEmailPath && token) {
+        try{
+            const secret = new TextEncoder().encode(process.env.TOKEN_SECRET!);
+            const { payload } = await jwtVerify(token, secret);
+            const verified = true;
+            
+            if (payload.isVerified === verified) {
+                return NextResponse.redirect(new URL('/', request.nextUrl));
+            }
+        } catch (error) {
+            console.error('Error processing email verification request:', error);
+            return NextResponse.redirect(new URL('/login', request.nextUrl));
+        }
+    }
     return NextResponse.next();
 }
 
@@ -36,5 +52,6 @@ export const config = {
         '/login',
         '/profile/:path*',
         '/unauthorized',
+        '/verify-email',
     ],
 };

@@ -16,6 +16,7 @@ export async function getUserFromToken() {
       createdAt?: string;
       updatedAt?: string;
       avatar?: AvatarFullConfig;
+      isVerified?: boolean;
     };
 
     return {
