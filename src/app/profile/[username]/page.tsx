@@ -7,6 +7,7 @@ import { EditProfileButton } from "@/app/components/editProfileButton";
 import { db } from "@/lib/db";
 import ProfileAvatar from "@/app/components/avatar/profileAvatar";
 import AvatarSelector from "@/app/components/avatar/avatar";
+import Verify from "@/app/components/verify";
 
 type ProfilePageProps = {
   params: { username: string };
@@ -55,6 +56,8 @@ export default async function ProfilePage(props: ProfilePageProps) {
             <p className='text-sm text-gray-400'>Profile Overview</p>
           </div>
         </div>
+
+        <Verify />
 
         <div className='mt-6 space-y-4'>
           <div className='p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
