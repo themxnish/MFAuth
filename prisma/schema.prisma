@@ -18,5 +18,7 @@ model User {
   isVerified Boolean @default(false)
   otp String?
   otpExpiry DateTime?
+  resetToken String?
+  resetTokenExpiry DateTime?
   avatar  Json?
 }
