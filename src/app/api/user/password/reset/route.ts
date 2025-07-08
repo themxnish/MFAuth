@@ -17,10 +17,8 @@ export async function POST(req: Request) {
       if (isValidToken) {
         user = data;
         break;
-      } else if (!isValidToken) {
-        return NextResponse.json({ message: "Invalid token" }, { status: 400 });
-      }
-    }
+      } 
+    } 
     if (!user || !user.resetToken || !user.resetTokenExpiry) {
       return NextResponse.json({ message: "Unauthorized user" }, { status: 401 });
     } 

@@ -53,7 +53,7 @@ export default function Login() {
                     </div>
 
                     <p className='text-sm text-right text-gray-500 hover:text-white mt-1'>
-                        <Link href="/reset">Forgot your password?</Link>
+                        <Link href="/reset-password">Forgot your password?</Link>
                     </p>
                     
                     <button className='w-full px-4 py-3 bg-gray-200 text-black font-medium rounded-md hover:bg-white mt-8' type="submit">Login</button>
