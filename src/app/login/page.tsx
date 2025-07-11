@@ -2,6 +2,9 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -58,6 +61,32 @@ export default function Login() {
                     
                     <button className='w-full px-4 py-3 bg-gray-200 text-black font-medium rounded-md hover:bg-white mt-8' type="submit">Login</button>
                 </form>
+                
+                <br />
+                <div className='flex items-center my-6'>
+                    <hr className='flex-grow border-gray-500' />
+                    <span className='px-4 text-sm text-gray-500 whitespace-nowrap'>
+                        Or login with
+                    </span>
+                    <hr className='flex-grow border-gray-500' />
+                </div>
+
+
+                <div className='flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 mt-4'>
+                    <div className='w-full sm:w-1/2 px-4 py-3 rounded-lg shadow-xl bg-[#3a3a3a] flex items-center justify-center'>
+                        <a href="/api/auth/oauth/github/login" className='text-white font-medium flex items-center space-x-2'>
+                        <FaGithub size={22} />
+                        <span>GitHub</span>
+                        </a>
+                    </div>
+
+                    <div className='w-full sm:w-1/2 px-4 py-3 rounded-lg shadow-xl bg-[#3a3a3a] flex items-center justify-center'>
+                        <a href="/api/auth/oauth/google/login" className='text-white font-medium flex items-center space-x-2'>
+                        <FcGoogle size={22} />
+                        <span>Google</span>
+                        </a>
+                    </div>
+                </div>
 
                 <p className='text-sm text-center text-gray-500 mt-4 mb-3'>
                     Don&apos;t have an account?{' '}
