@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
     { expiresIn: '1d' }
   );
 
-  const response = NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/`);
+  const response = NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/profile/${user.username}`);
   response.cookies.set('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
