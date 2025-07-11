@@ -21,4 +21,21 @@ model User {
   resetToken String?
   resetTokenExpiry DateTime?
   avatar  Json?
+
+  accounts Account[]
+}
+
+model Account {
+  id                Int       @id @default(autoincrement())
+  provider          String    
+  providerAccountId String   
+  accessToken       String?   
+  refreshToken      String?  
+  expiresAt         Int?      
+  tokenType         String?   
+  scope             String?  
+  idToken           String?   
+
+  userId            Int
+  user              User      @relation(fields: [userId], references: [id])
 }

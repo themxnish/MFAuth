@@ -5,12 +5,13 @@ export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const isPublicPath = path === '/register' || path === '/login';
     const isEmailPath = path === '/verify-email';
+    const isResetPath = path === '/reset-password';
 
     const token = request.cookies.get('token')?.value || '';
 
     if(isPublicPath && token) {
         return NextResponse.redirect(new URL('/', request.nextUrl));
-    } else if (!isPublicPath && !token && !isEmailPath) {
+    } else if (!isPublicPath && !token && !isResetPath) {
         return NextResponse.redirect(new URL('/login', request.nextUrl));
     }
 
@@ -53,5 +54,6 @@ export const config = {
         '/profile/:path*',
         '/unauthorized',
         '/verify-email',
+        '/reset-password',
     ],
 };
