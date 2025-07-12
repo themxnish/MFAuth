@@ -16,6 +16,21 @@ export default function Login() {
     const [ showPassword, setShowPassword ] = React.useState(false);
     const router = useRouter();
 
+    const getUsername = async() => {
+        const response = await fetch('/api/user/session', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        if (response.ok) {
+            toast.success('Welcome, ' + data.user.username);
+            return data.user.username;
+        }
+        return null;
+    }
+
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -31,7 +46,12 @@ export default function Login() {
             const data = await response.json();
             if (response.ok) {
                 toast.success('Login successful');
-                router.push('/');
+                const username = await getUsername();
+                if (username) {
+                    router.push(`profile/${username}`);
+                } else {
+                    toast.error('could not find username');
+                }
             } else {
                 toast.error(data.message || 'Login failed');
             }
