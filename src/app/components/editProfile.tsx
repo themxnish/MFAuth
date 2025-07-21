@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import AvatarSelector from './avatar/avatar';
+import { useRouter } from 'next/navigation';
 
 export default function EditProfile() {
     const [ name, setName ] = useState('');
     const [ bio, setBio ] = useState('');
 
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -46,6 +48,38 @@ export default function EditProfile() {
         }
     }
     
+    const handleDelete = async () => {
+        const confirmed = confirm("Are you sure you want to delete your account? This cannot be undone.");
+        if (!confirmed) return;
+
+        const username = prompt("Please enter your username to confirm deletion:");
+        if (!username) return toast.error("Username is required to delete your account");
+
+        try {
+            const response = await fetch('/api/user/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                toast.success('Account deleted. Goodbye :(');   
+                setTimeout(() => {
+                    router.push('/login');
+                }, 2000);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error("Something went wrong.");
+            console.error(error);
+        }
+    };
+
 
     return (
         <div className='w-full max-w-lg space-y-6 px-4 py-8 flex flex-col items-center justify-center'>
@@ -64,6 +98,10 @@ export default function EditProfile() {
             <div className='flex flex-row justify-between text-sm w-full'>
                 <label className='text-gray-300'>Reset Password:</label>
                 <button className='bg-[#4B4B4B] px-4 py-2 ml-auto w-1/3 rounded-lg shadow-xl text-sm font-medium text-white'><a href='/reset-password'>Change?</a></button>    
+            </div>
+            <div className='flex flex-row justify-between text-sm w-full'>
+                <label className='text-gray-300'>Delete Account:</label>
+                <button onClick={handleDelete} className='bg-red-400/30 px-4 py-2 ml-auto w-1/2 sm:w-1/3 rounded-lg shadow-xl text-sm font-medium text-white'>Danger Zone!!</button>
             </div>
 
             <button onClick={handleEdit} className='bg-[#4B4B4B] w-full text-white font-semibold px-4 py-2 rounded-lg shadow-xl cursor-pointer'>Save</button>
