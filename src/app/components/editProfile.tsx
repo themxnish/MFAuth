@@ -20,8 +20,8 @@ export default function EditProfile() {
                 })
 
                 const data = await response.json()
-                setName(data.user.name)
-                setBio(data.user.bio)
+                setName(data.user.name || '')
+                setBio(data.user.bio || '')
             } catch (error) {
                 console.log(error)
                 toast.error('Failed to load profile. Please log in.')

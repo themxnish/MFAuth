@@ -17,6 +17,8 @@ export async function GET(req: NextRequest) {
     id: user.id,
     email: user.email,
     username: user.username,
+    name: user.name,
+    bio: user.bio,
     createdAt: user.createdAt.toISOString(),
     updatedAt: user.updatedAt.toISOString(),
     isVerified: user.isVerified,
@@ -85,7 +87,7 @@ async function findOrCreateUser(profile: any, accessToken: string) {
     user = await db.user.create({
       data: {
         email,
-        username: profile.name?.replace(/\s/g, '')?.toLowerCase() || `google-user${profile.id}`,
+        username: profile.email?.split('@')[0] || `google-user${profile.id}`,
         password: '',
         isVerified: true,
       },

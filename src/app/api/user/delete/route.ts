@@ -20,6 +20,7 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    await db.account.deleteMany({ where: { userId: user.id } });
     await db.user.delete({ where: { username } });
 
     const response = NextResponse.json({ message: "User deleted successfully:(" }, { status: 200 });
