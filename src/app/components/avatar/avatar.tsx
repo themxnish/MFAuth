@@ -36,7 +36,7 @@ export default function AvatarSelector() {
     <div className='p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
       <div className='flex justify-between items-center mb-2'>
         <h2 className='text-md font-semibold text-white'>Choose your Avatar</h2>
-        <button onClick={handleBlock} className='text-white flex gap-2 items-center'>
+        <button onClick={handleBlock} className='text-white flex gap-2 items-center cursor-pointer'>
           {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </button>
       </div>

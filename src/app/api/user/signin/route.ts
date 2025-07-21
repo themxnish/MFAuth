@@ -24,6 +24,8 @@ export async function POST(req: Request) {
             id: user.id,
             email: user.email,
             username: user.username,
+            name: user.name,
+            bio: user.bio,
             createdAt: user.createdAt.toISOString(),
             updatedAt: user.updatedAt.toISOString(),
             isVerified: user.isVerified

@@ -16,7 +16,10 @@ export async function middleware(request: NextRequest) {
     }
 
     if (path.startsWith('/profile/')) {
-        const username = path.split('/')[2]; 
+        const username = path.split('/')[2];
+        if (!username) {
+            return NextResponse.redirect(new URL('/unauthorized', request.nextUrl));
+        }
         try {
             const secret = new TextEncoder().encode(process.env.TOKEN_SECRET!);
             const { payload } = await jwtVerify(token, secret);

@@ -12,6 +12,8 @@ export async function getUserFromToken() {
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET!) as {
       id: string;
       username: string;
+      name: string;
+      bio: string;
       email: string;
       createdAt?: string;
       updatedAt?: string;

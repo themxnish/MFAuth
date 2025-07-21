@@ -13,7 +13,6 @@ type ProfilePageProps = {
   params: { username: string };
 };
 
-
 export default async function ProfilePage(props: ProfilePageProps) {
   const params = await props.params;
   const user = await getUserFromToken();
@@ -66,6 +65,16 @@ export default async function ProfilePage(props: ProfilePageProps) {
               <p className='font-semibold text-white truncate'>{user.email}</p>
             </div>
             <div className='flex items-center justify-between text-sm mt-2'>
+              <p className='text-gray-300'>Fullname:</p>
+              <p className="font-semibold text-white">{user.name}</p>
+            </div>
+            <div className='flex items-center justify-between text-sm mt-2'>
+              <p className='text-gray-300'>Bio:</p>
+              <div className='w-1/2 justify-end text-right'>
+                <p className="font-semibold text-white">{user.bio}</p>
+              </div>
+            </div>
+            <div className='flex items-center justify-between text-sm mt-2'>
               <p className='text-gray-300'>Joined:</p>
               <p className="font-semibold text-white">
                 {user.createdAt ? format(user.createdAt, 'MMMM dd, yyyy') : "N/A"}
@@ -79,8 +88,9 @@ export default async function ProfilePage(props: ProfilePageProps) {
             </div>
           </div>
 
-          <div className='p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
+          <div className='flex flex-row justify-between items-center p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
             <h2 className='text-md font-semibold text-white mb-2'>2FA Authentication Status</h2>
+            {user.isVerified ? <p className='text-green-400'>Enabled</p> : <p className='text-red-400'>Disabled</p>}
           </div>
 
           <AvatarSelector />
