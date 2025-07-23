@@ -25,6 +25,7 @@ model User {
   avatar  Json?
 
   accounts Account[]
+  logs Log[]
 }
 
 model Account {
@@ -40,4 +41,16 @@ model Account {
 
   userId            Int
   user              User      @relation(fields: [userId], references: [id])
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  ip        String
+  event     String
+  location  String
+  isp       String
+  loggedAt  DateTime @default(now())
+
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
