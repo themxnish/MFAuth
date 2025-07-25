@@ -82,7 +82,7 @@ export default function Navbar() {
 
       <div className='hidden md:flex items-center gap-6'>
         <NavLink href='/' label='Home' />
-        <NavLink href='/settings' label='Settings' />
+        <NavLink href='/activity' label='User Activity' />
         <button onClick={redirectToProfile} className='text-lg cursor-pointer'><User className={`w-6 h-6 ${pathname === `/profile/${user}` ? 'text-gray-400 hover:scale-95' : 'text-white hover:scale-105'}`}/></button>
         { authenticated ?(
           <button onClick={logout} className='bg-gray-500 px-3 py-1 rounded-md text-white text-lg font-semibold hover:ring-2 hover:ring-gray-300 transition-all duration-200'>Logout</button>
@@ -103,7 +103,7 @@ export default function Navbar() {
         <div onClick={() => setMenuOpen(false)} className='absolute gap-2 bg-[#1B1B1B] top-16 left-0 w-full p-4 flex flex-col items-center md:hidden'>
           <NavLink href='/' label='Home' />
           <NavLink href={`/profile/${user}`} label='Profile' />
-          <NavLink href='/settings' label='Settings' />
+          <NavLink href='/activity' label='User Activity' />
           { authenticated ? (
             <button onClick={logout} className='text-lg'>Logout</button>
           ):(

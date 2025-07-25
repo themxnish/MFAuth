@@ -58,5 +58,6 @@ export const config = {
         '/unauthorized',
         '/verify-email',
         '/reset-password',
+        '/activity',
     ],
 };
