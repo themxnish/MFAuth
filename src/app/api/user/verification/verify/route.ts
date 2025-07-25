@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { eventLog } from '@/lib/logs/logEvent';
 
 export async function POST(req: Request) {
     try {
@@ -33,6 +34,8 @@ export async function POST(req: Request) {
                 otpExpiry: null,
             },
         });
+
+        await eventLog(user.id, 'Email verified');
 
         return NextResponse.json({ message: "OTP Verification is successful" }, { status: 200 });
 

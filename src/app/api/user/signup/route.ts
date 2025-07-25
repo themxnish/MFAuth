@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { NextResponse } from "next/server";
+import { authLog } from "@/lib/logs/logUserAuth";
 
 const inputSchema = z.object({ 
     username: z.string().min(3, "username is too short").max(100),
@@ -49,6 +50,8 @@ export async function POST(req: Request) {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password: newUserPassword, ...rest } = newUser;
+
+        await authLog(newUser.id, "User Created");
 
         return NextResponse.json({ user: rest, message: "user created successfully" }, { status: 201 });
     } catch (error) {

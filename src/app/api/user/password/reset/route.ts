@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { eventLog } from '@/lib/logs/logEvent';
 
 export async function POST(req: Request) {
   try {
@@ -57,6 +58,8 @@ export async function POST(req: Request) {
       maxAge: 0,
       expires: new Date(0)
     });
+
+    await eventLog(user.id, "Password Changed");
 
     return response;
 

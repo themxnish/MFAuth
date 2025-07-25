@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import { authLog } from "@/lib/logs/logUserAuth";
 
 export async function POST(req: Request) {
     try {
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
             httpOnly: true,
         })
 
+        await authLog(user.id, "Logged In");
         return response;
     } catch (error) {
         console.error("Error signing in user:", error);

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getUserFromToken } from "@/lib/auth";
+import { eventLog } from "@/lib/logs/logEvent";
 
 export async function PATCH(req: Request) {
     const body = await req.json();
@@ -35,6 +36,8 @@ export async function PATCH(req: Request) {
         bio: body.bio
        },
     });
+
+    await eventLog(user.id, "Profile Updated");
 
     return NextResponse.json({ message: "User updated successfully", user: updatedUser }, { status: 200 });
 }
