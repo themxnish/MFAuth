@@ -4,16 +4,14 @@ import { redirect } from "next/navigation";
 import EditProfile from "@/app/components/editProfile";
 import ProfileAvatar from "@/app/components/avatar/profileAvatar";
 
-type EditProfilePageProps = {
-  params: { username: string };
-};
-
-export default async function ProfilePage(props: EditProfilePageProps) {
-    const params = await props.params;
+export default async function ProfilePage() {
     const user = await getUserFromToken();
+    if (!user) {
+      redirect("/login");
+    }
   
     const data = await db.user.findUnique({
-      where: { username: params.username },
+      where: { username: user.username },
       select: {
         id: true,
         username: true,
@@ -21,8 +19,8 @@ export default async function ProfilePage(props: EditProfilePageProps) {
         isVerified: true
       },
     });
-    
-    if (!data || data.username !== params.username || !user) {
+
+    if (!data || !data.username) {
       redirect("/login");
     }
 

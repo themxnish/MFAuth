@@ -14,7 +14,7 @@ type ProfilePageProps = {
 };
 
 export default async function ProfilePage(props: ProfilePageProps) {
-  const params = await props.params;
+  const params = props.params;
   const user = await getUserFromToken();
 
   const data = await db.user.findUnique({
