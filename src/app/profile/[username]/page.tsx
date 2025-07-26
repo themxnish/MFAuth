@@ -9,16 +9,14 @@ import ProfileAvatar from "@/app/components/avatar/profileAvatar";
 import AvatarSelector from "@/app/components/avatar/avatar";
 import Verify from "@/app/components/verify";
 
-type ProfilePageProps = {
-  params: { username: string };
-};
-
-export default async function ProfilePage(props: ProfilePageProps) {
-  const params = props.params;
+export default async function ProfilePage() {
   const user = await getUserFromToken();
+    if (!user) {
+      redirect("/login");
+    }
 
   const data = await db.user.findUnique({
-    where: { username: params.username },
+    where: { username: user.username },
     select: {
       id: true,
       username: true,
@@ -31,7 +29,7 @@ export default async function ProfilePage(props: ProfilePageProps) {
   
   if (!user) {
     redirect("/login");
-  } else if (user.username !== params.username) {
+  } else if (user.username !== data?.username) {
     return(
       <div className='text-center items-center justify-center flex flex-col h-[80vh] px-4'>
         <div className='bg-[#3B3B3C] shadow-xl rounded-xl p-6 max-w-md w-full'>
