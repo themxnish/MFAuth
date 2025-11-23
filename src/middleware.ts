@@ -59,5 +59,6 @@ export const config = {
         '/verify-email',
         '/reset-password',
         '/activity',
+        '/submit'
     ],
 };

@@ -26,6 +26,8 @@ model User {
 
   accounts Account[]
   logs Log[]
+
+  evidenceSubmissions Evidence[]
 }
 
 model Account {
@@ -53,4 +55,18 @@ model Log {
 
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Evidence {
+  id            Int           @id @default(autoincrement())
+  incidentType  String
+  location      String
+  datetime      DateTime
+  description   String
+  evidenceUrls  Json
+  comments      String?
+  createdAt     DateTime      @default(now())
+
+  userId        Int?          
+  user          User?         @relation(fields: [userId], references: [id])
 }
