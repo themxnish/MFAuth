@@ -9,8 +9,8 @@ export default function EditProfileButton({ username }: { username: string }) {
   };
 
   return (
-    <button onClick={edit} className='bg-[#4B4B4B] py-3 px-2 rounded-lg shadow-xl flex-1 cursor-pointer'>
-      <p className='text-md font-bold text-white mb-2'>Edit Profile</p>
+    <button onClick={edit} className='bg-white/[0.08] hover:bg-white/[0.12] py-3 px-2 rounded-2xl border border-white/10 shadow-xl flex-1 cursor-pointer'>
+      <p className='text-md font-bold text-white'>Edit Profile</p>
     </button>
   );
 }

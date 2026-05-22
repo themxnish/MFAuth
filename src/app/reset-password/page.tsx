@@ -83,17 +83,17 @@ export default function ResetPassword() {
       }
     }
     return (
-        <div className='min-h-screen flex flex-col items-center justify-center px-4'>
-            <div className='max-w-md w-full px-6 py-10 bg-[#3B3B3C] text-white shadow-xl rounded-xl'>
-                <h1 className='text-2xl font-bold text-center'>Reset Password</h1>
+        <div className='min-h-screen flex flex-col items-center justify-center px-4 py-10'>
+            <div className='max-w-md w-full px-6 py-10 rounded-3xl border border-white/10 bg-zinc-950/70 text-white shadow-2xl shadow-black/30 backdrop-blur'>
+                <h1 className='text-3xl font-black text-center'>Reset Password</h1>
                 <p className='text-sm text-gray-400 mb-4 text-center'>Forgot your password? No problem.</p>
 
                 {page === 'forgot' && (
                     <div className='flex flex-col items-center justify-center gap-4'>
-                        <RotateCcwKey className='w-18 h-18 text-gray-300 mt-6' />
-                        <p className='text-md text-gray-300'>Enter your email address below to receive a link to reset your password.</p>
-                        <input className='text-white text-md w-full px-4 py-3 bg-[#4B4B4B] shadow-xl rounded-lg' type='email' name='email' placeholder='abc@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)}/>
-                        <button className='bg-[#4B4B4B] text-white w-1/2 py-3 px-4 rounded-full shadow-xl mt-4 hover:scale-105 cursor-pointer' onClick={forgot} disabled={sending}>
+                        <RotateCcwKey className='w-18 h-18 text-emerald-300 mt-6' />
+                        <p className='text-md text-center text-gray-300'>Enter your email address below to receive a link to reset your password.</p>
+                        <input className='text-white text-md w-full px-4 py-3 border border-white/10 bg-white/[0.07] shadow-xl rounded-xl focus:ring-2 focus:ring-emerald-300/50' type='email' name='email' placeholder='abc@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <button className='bg-emerald-400 text-zinc-950 w-1/2 py-3 px-4 rounded-full shadow-xl mt-4 hover:bg-emerald-300 cursor-pointer disabled:opacity-60' onClick={forgot} disabled={sending}>
                             {sending ? (
                                 <span className='text-sm font-bold'>Sending...</span>
                             ) : (
@@ -107,23 +107,23 @@ export default function ResetPassword() {
 
                 {page === 'reset' && token && (
                     <div className='flex flex-col items-center justify-center gap-4'>
-                        <Key className='w-18 h-18 text-yellow-300 mt-6' />
+                        <Key className='w-18 h-18 text-emerald-300 mt-6' />
                         <p className='text-md text-gray-300'>Enter your new password below:</p>
                         <div className='relative w-full'>
-                            <input className='text-white text-md w-full px-4 py-3 bg-[#4B4B4B] shadow-xl rounded-lg' type={showPassword ? 'text' : 'password'} name='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                            <input className='text-white text-md w-full px-4 py-3 border border-white/10 bg-white/[0.07] shadow-xl rounded-xl focus:ring-2 focus:ring-emerald-300/50' type={showPassword ? 'text' : 'password'} name='password' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                             <button type='button' onClick={() => setShowPassword(prev => !prev)} className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white focus:outline-none'>
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
 
                         <div className='relative w-full'>
-                            <input className='text-white text-md w-full px-4 py-3 bg-[#4B4B4B] shadow-xl rounded-lg'  type={showPassword ? 'text' : 'password'} name='password' placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+                            <input className='text-white text-md w-full px-4 py-3 border border-white/10 bg-white/[0.07] shadow-xl rounded-xl focus:ring-2 focus:ring-emerald-300/50'  type={showPassword ? 'text' : 'password'} name='password' placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
                             <button type='button' onClick={() => setShowPassword(prev => !prev)} className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white focus:outline-none'>
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
 
-                        <button className='bg-[#4B4B4B] text-white w-1/2 py-3 px-4 rounded-full shadow-xl mt-4 hover:scale-105 cursor-pointer' onClick={reset}>Reset Password</button>
+                        <button className='bg-emerald-400 text-zinc-950 font-bold w-1/2 py-3 px-4 rounded-full shadow-xl mt-4 hover:bg-emerald-300 cursor-pointer' onClick={reset}>Reset Password</button>
                         <p className='text-sm text-gray-400'>This link is only valid 15 minutes...</p>
                     </div>
                 )}
@@ -131,8 +131,8 @@ export default function ResetPassword() {
                 {page === 'done' && (
                     <div className='flex flex-col items-center justify-center gap-4'>
                         <CheckCircle className='w-16 h-16 text-green-400 mt-6' />
-                        <p className='text-md text-gray-300'>Your password has been changed successfully</p>
-                        <button className='bg-[#4B4B4B] text-sky-400 w-1/2 py-3 px-4 rounded-full shadow-xl mt-6 hover:scale-105 cursor-pointer' onClick={complete}>
+                        <p className='text-md text-center text-gray-300'>Your password has been changed successfully</p>
+                        <button className='bg-emerald-400 text-zinc-950 w-1/2 py-3 px-4 rounded-full shadow-xl mt-6 hover:bg-emerald-300 cursor-pointer' onClick={complete}>
                             <CheckCheck className='w-6 h-6 inline-block' />
                         </button>
                     </div>

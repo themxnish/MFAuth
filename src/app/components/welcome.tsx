@@ -21,9 +21,11 @@ export default function WelcomeText() {
         getUsername();
     })
     return (
-        <div className='p-4 flex flex-col items-center'>
-            <div className='w-full sm:w-1/2'>
-                <h1 className='text-2xl font-bold text-white text-center'>Welcome, {username}!</h1>
+        <div className='py-10 flex flex-col items-center text-center'>
+            <div className='w-full max-w-3xl'>
+                <p className='text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300'>Secure workspace</p>
+                <h1 className='mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl'>Welcome, {username || 'there'}!</h1>
+                <p className='mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-400'>Protect messages, submit evidence, verify your account, and review activity from one focused dashboard.</p>
             </div>
         </div>
     );

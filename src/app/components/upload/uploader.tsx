@@ -125,9 +125,9 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
     });
 
     return (
-        <div className="p-4 w-full">
-            <Card className={cn("relative border-2 rounded-2xl border-dashed border-gray-400 p-4 transition-colors duration-200 ease-in-out w-full h-40 shadow-xl",
-                isDragActive ? "bg-gray-200/20 border-yellow-200 border-solid" : "border-dashed hover:border-yellow-200 bg-gray-100/20 border-gray-300"
+        <div className="p-0 sm:p-4 w-full">
+            <Card className={cn("relative border-2 rounded-2xl border-dashed p-4 transition-colors duration-200 ease-in-out w-full h-40 shadow-xl",
+                isDragActive ? "bg-emerald-300/10 border-emerald-200 border-solid" : "border-dashed hover:border-emerald-200 bg-white/[0.06] border-white/20"
              )} {...getRootProps()}>
 
                 <CardContent className="flex flex-col items-center justify-center h-full w-full">
@@ -137,7 +137,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
                     ) : ( 
                         <div className="flex flex-col items-center justify-center gap-y-3">
                             <p>Drag and drop some files here, or click to select files</p>
-                            <button className="bg-gray-400 py-1 px-2 rounded-lg shadow-xl flex-1 cursor-pointer">Select files</button>
+                            <button className="bg-emerald-400 text-zinc-950 font-semibold py-2 px-4 rounded-xl shadow-xl flex-1 cursor-pointer">Select files</button>
                         </div>
                     )}
                 </CardContent>

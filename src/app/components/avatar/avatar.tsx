@@ -33,7 +33,7 @@ export default function AvatarSelector() {
   };
 
   return (
-    <div className='p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
+    <div className='p-4 rounded-2xl border border-white/10 shadow-xl bg-white/[0.06]'>
       <div className='flex justify-between items-center mb-2'>
         <h2 className='text-md font-semibold text-white'>Choose your Avatar</h2>
         <button onClick={handleBlock} className='text-white flex gap-2 items-center cursor-pointer'>

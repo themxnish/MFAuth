@@ -7,7 +7,6 @@ import { EditProfileButton } from "@/app/components/editProfileButton";
 import { db } from "@/lib/db";
 import ProfileAvatar from "@/app/components/avatar/profileAvatar";
 import AvatarSelector from "@/app/components/avatar/avatar";
-import Verify from "@/app/components/verify";
 
 export default async function ProfilePage() {
   const user = await getUserFromToken();
@@ -32,7 +31,7 @@ export default async function ProfilePage() {
   } else if (user.username !== data?.username) {
     return(
       <div className='text-center items-center justify-center flex flex-col h-[80vh] px-4'>
-        <div className='bg-[#3B3B3C] shadow-xl rounded-xl p-6 max-w-md w-full'>
+        <div className='rounded-3xl border border-white/10 bg-zinc-950/70 shadow-2xl shadow-black/30 p-6 max-w-md w-full'>
           <CrossIcon className='w-12 h-12 text-red-400 mx-auto rotate-45 mb-4' />
           <h1 className='text-2xl font-bold mb-2 text-white'>Unauthorized Access</h1>
           <p className='text-sm text-gray-400'>You do not have permission to view this profile.</p>
@@ -42,10 +41,10 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center px-4'>
-      <div className='w-full max-w-xl bg-[#3B3B3B] shadow-xl rounded-xl p-6'>
+    <div className='min-h-screen flex items-center justify-center px-4 py-10'>
+      <div className='w-full max-w-xl rounded-3xl border border-white/10 bg-zinc-950/70 shadow-2xl shadow-black/30 p-6 backdrop-blur'>
         <div className='flex items-center gap-4'>
-          <div className='h-24 w-24 rounded-full border-5 border-black overflow-hidden shadow-lg'>
+          <div className='h-20 w-20 shrink-0 rounded-full border border-white/15 bg-white/[0.05] p-1 overflow-hidden shadow-lg sm:h-24 sm:w-24'>
             <ProfileAvatar avatar={typeof data?.avatar === "string" ? JSON.parse(data.avatar) : (data?.avatar ?? null)} />
           </div>
           <div>
@@ -54,10 +53,8 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        <Verify />
-
         <div className='mt-6 space-y-4'>
-          <div className='p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
+          <div className='p-4 rounded-2xl border border-white/10 shadow-xl bg-white/[0.06]'>
             <div className='flex items-center justify-between text-sm'>
               <p className='text-gray-300'>Email:</p>
               <p className='font-semibold text-white truncate'>{user.email}</p>
@@ -86,7 +83,7 @@ export default async function ProfilePage() {
             </div>
           </div>
 
-          <div className='flex flex-row justify-between items-center p-4 rounded-lg shadow-xl bg-[#4B4B4B]'>
+          <div className='flex flex-row justify-between items-center p-4 rounded-2xl border border-white/10 shadow-xl bg-white/[0.06]'>
             <h2 className='text-md font-semibold text-white mb-2'>2FA Authentication Status</h2>
             {user.isVerified ? <p className='text-green-400'>Enabled</p> : <p className='text-red-400'>Disabled</p>}
           </div>

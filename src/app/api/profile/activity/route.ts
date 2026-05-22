@@ -12,10 +12,7 @@ export async function GET() {
 
   const logs = await db.log.findMany(
     {
-        where: { userId: Number(user.id) },
-        orderBy: { loggedAt: "desc" },
-        take: 12
+        where: { userId: Number(user.id) },        orderBy: { loggedAt: "desc" }
     }); 
   return NextResponse.json({ logs });
 }
-  

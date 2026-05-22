@@ -7,9 +7,9 @@ export default function Footer() {
     if (hiddenPaths.includes(pathname)) return null;
     
     return (
-       <footer className='py-2'>
+       <footer className='py-6'>
             <div className='flex flex-col items-center justify-center text-center text-gray-400'>
-                <p className='text-xs'>MFauth &copy; 2025. All rights secured.</p>  
+                <p className='text-xs'>MFauth &copy; 2025. All data secured. </p>  
             </div>
        </footer>
     );

@@ -50,20 +50,20 @@ export default function Submit() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto flex flex-col items-center justify-center p-4">
+    <div className="max-w-4xl mx-auto flex flex-col items-center justify-center p-4">
       <div className='flex flex-col items-center justify-center mt-4'>
-        <h1 className='text-2xl font-bold text-white'>Evidence Submission</h1>
-        <p className="mb-6 text-sm text-gray-500">
+        <h1 className='text-3xl font-black text-white'>Evidence Submission</h1>
+        <p className="mb-6 mt-2 text-center text-sm text-gray-400">
           Please provide accurate details. Your identity is protected by our secure system.
         </p>
       </div>
 
-      <form className='space-y-4 text-white w-full mt-3'>
+      <form className='space-y-4 text-white w-full mt-3 rounded-3xl border border-white/10 bg-zinc-950/70 p-5 shadow-2xl shadow-black/30 backdrop-blur sm:p-8'>
         <h2 className="text-lg font-semibold mb-3 text-center">Incident Details</h2>
 
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Type of Incident*</span>
-          <select name="incident_type" required className="w-full bg-[#3a3a3a] text-sm mt-1 p-2 rounded-xl" value={data.incident_type} onChange={e => setData({ ...data, incident_type: e.target.value })}>
+          <select name="incident_type" required className="w-full border border-white/10 bg-white/[0.07] text-sm mt-1 p-3 rounded-xl focus:ring-2 focus:ring-emerald-300/50" value={data.incident_type} onChange={e => setData({ ...data, incident_type: e.target.value })}>
             <option value="">Select...</option>
             <option value="crime">Crime</option>
             <option value="corruption">Corruption</option>
@@ -75,17 +75,17 @@ export default function Submit() {
 
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Location of Incident*</span>
-          <input type="text" name="location" required className="w-full mt-1 p-2 text-sm bg-[#3a3a3a] rounded-xl" placeholder="City, building, street, etc." value={data.location} onChange={e => setData({ ...data, location: e.target.value })} />
+          <input type="text" name="location" required className="w-full mt-1 p-3 text-sm border border-white/10 bg-white/[0.07] rounded-xl focus:ring-2 focus:ring-emerald-300/50" placeholder="City, building, street, etc." value={data.location} onChange={e => setData({ ...data, location: e.target.value })} />
         </label>
 
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Date & Time*</span>
-          <input type="datetime-local" name="datetime" required className="w-full mt-1 p-2 text-sm bg-[#3a3a3a] rounded-xl" value={data.datetime} onChange={e => setData({ ...data, datetime: e.target.value })} />
+          <input type="datetime-local" name="datetime" required className="w-full mt-1 p-3 text-sm border border-white/10 bg-white/[0.07] rounded-xl focus:ring-2 focus:ring-emerald-300/50" value={data.datetime} onChange={e => setData({ ...data, datetime: e.target.value })} />
         </label>
 
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Description of Incident</span>
-          <textarea name="description" rows={4} required className="w-full mt-1 p-2 text-sm bg-[#3a3a3a] rounded-xl" placeholder="Provide a detailed description..." value={data.description} onChange={e => setData({ ...data, description: e.target.value })}></textarea>
+          <textarea name="description" rows={4} required className="w-full mt-1 p-3 text-sm border border-white/10 bg-white/[0.07] rounded-xl focus:ring-2 focus:ring-emerald-300/50" placeholder="Provide a detailed description..." value={data.description} onChange={e => setData({ ...data, description: e.target.value })}></textarea>
         </label>
 
         <label className="block mb-3">
@@ -96,14 +96,14 @@ export default function Submit() {
 
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Additional Comments</span>
-          <textarea name="comments" rows={3} className="w-full mt-1 p-2 text-sm bg-[#3a3a3a] rounded-xl" placeholder="Optional, You can include your contact details here" value={data.comments} onChange={e => setData({ ...data, comments: e.target.value })}></textarea>
+          <textarea name="comments" rows={3} className="w-full mt-1 p-3 text-sm border border-white/10 bg-white/[0.07] rounded-xl focus:ring-2 focus:ring-emerald-300/50" placeholder="Optional, You can include your contact details here" value={data.comments} onChange={e => setData({ ...data, comments: e.target.value })}></textarea>
         </label>
 
         <div className="flex justify-center">
-          <button type="button" onClick={onSubmit} className="bg-gray-500 w-sm mt-4 hover:bg-gray-700 cursor-pointer text-white font-semibold py-2 px-4 rounded-xl transition-colors duration-200">Submit</button>
+          <button type="button" onClick={onSubmit} className="bg-emerald-400 w-full max-w-sm mt-4 hover:bg-emerald-300 cursor-pointer text-zinc-950 font-bold py-3 px-4 rounded-xl">Submit</button>
         </div>
 
-        <p className="text-xs text-gray-500">By submitting this form, you acknowledge that you have read and agree to the terms and conditions of our evidence submission policy.</p>
+        <p className="text-xs text-center text-gray-500">By submitting this form, you acknowledge that you have read and agree to the terms and conditions of our evidence submission policy.</p>
       </form>
     </div>
   );

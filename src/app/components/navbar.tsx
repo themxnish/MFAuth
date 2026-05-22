@@ -44,7 +44,7 @@ export default function Navbar() {
   if (hiddenPaths.includes(pathname)) return null;
 
   const NavLink = ({ href, label }: { href: string; label: string }) => (
-    <Link href={href} className={`text-lg ${pathname === href ? 'text-gray-400 font-semibold hover:scale-95' : 'text-white hover:scale-105'}`}>
+    <Link href={href} className={`text-sm font-semibold ${pathname === href ? 'text-emerald-300' : 'text-gray-200 hover:text-white'}`}>
       {label}
     </Link>
   );
@@ -71,47 +71,47 @@ export default function Navbar() {
   };
   
   return (
-    <div className='text-white px-6 py-4 flex items-center justify-between relative z-50'>  
-      <h1 className='text-3xl font-extrabold flex items-center gap-1 tracking-tight'>
+    <div className='sticky top-0 z-50 mx-auto mt-3 flex w-[calc(100%-1rem)] max-w-6xl items-center justify-between rounded-2xl border border-white/10 bg-zinc-950/85 px-3 py-3 text-white shadow-2xl shadow-black/25 backdrop-blur sm:w-[calc(100%-1.5rem)] sm:px-4'>  
+      <Link href='/' className='text-2xl font-extrabold flex items-center gap-1 tracking-tight sm:text-2xl'>
         <span className='text-white'>MF</span>
         <span className='relative inline-block'>
-          <span className='absolute inset-0 bg-gray-400 blur-sm opacity-70 rounded-md'></span>
-          <span className='relative bg-gray-500 text-white px-2 py-0.5 rounded-md shadow-md'>auth</span>
+          <span className='absolute inset-0 bg-emerald-400 blur-sm opacity-50 rounded-md'></span>
+          <span className='relative bg-emerald-400 text-zinc-950 px-2 py-0.5 rounded-md shadow-md'>auth</span>
         </span>
-      </h1>
+      </Link>
 
       <div className='hidden md:flex items-center gap-6'>
         <NavLink href='/' label='Home' />
         <NavLink href='/activity' label='User Activity' />
         <NavLink href='/submit' label='Submit Evidence' />
-        <button onClick={redirectToProfile} className='text-lg cursor-pointer'><User className={`w-6 h-6 ${pathname === `/profile/${user}` ? 'text-gray-400 hover:scale-95' : 'text-white hover:scale-105'}`}/></button>
+        <button onClick={redirectToProfile} className='cursor-pointer rounded-full bg-white/10 p-2 hover:bg-white/15'><User className={`w-5 h-5 ${pathname === `/profile/${user}` ? 'text-emerald-300' : 'text-white'}`}/></button>
         { authenticated ?(
-          <button onClick={logout} className='bg-gray-500 px-3 py-1 rounded-md text-white text-lg font-semibold hover:ring-2 hover:ring-gray-300 transition-all duration-200'>Logout</button>
+          <button onClick={logout} className='rounded-xl bg-white px-4 py-2 text-sm font-bold text-zinc-950 hover:bg-emerald-200'>Logout</button>
         ):(
-          <button className='bg-gray-500 px-3 py-1 rounded-md hover:ring-2 hover:ring-gray-300 transition-all duration-200'>
-            <Link href='/login' className='text-white text-lg font-semibold' >Login</Link>
+          <button className='rounded-xl bg-white px-4 py-2 hover:bg-emerald-200'>
+            <Link href='/login' className='text-sm font-bold text-zinc-950' >Login</Link>
           </button>
         )}
       </div>
 
-      <div className='md:hidden flex items-center '>
-        <button onClick={() => setMenuOpen(true)}>
+      <div className='md:hidden flex items-center'>
+        <button onClick={() => setMenuOpen(true)} className='p-2'>
           <Menu className='w-6 h-6 text-gray-300' />
         </button>
       </div>
 
       { menuOpen && (
-        <div onClick={() => setMenuOpen(false)} className='absolute gap-2 bg-[#1B1B1B] top-16 left-0 w-full p-4 flex flex-col items-center md:hidden'>
-          <NavLink href='/' label='Home' />
-          <NavLink href={`/profile/${user}`} label='Profile' />
-          <NavLink href='/activity' label='User Activity' />
-          <NavLink href='/submit' label='Submit Evidence' />
+        <div onClick={() => setMenuOpen(false)} className='absolute left-0 top-[4.35rem] grid w-full gap-2 rounded-2xl border border-white/10 bg-black p-3 shadow-2xl shadow-black/60 md:hidden'>
+          <Link href='/' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Home</Link>
+          <Link href={`/profile/${user}`} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === `/profile/${user}` ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Profile</Link>
+          <Link href='/activity' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/activity' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>User Activity</Link>
+          <Link href='/submit' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/submit' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Submit Evidence</Link>
           { authenticated ? (
-            <button onClick={logout} className='text-lg'>Logout</button>
+            <button onClick={logout} className='rounded-xl bg-white px-4 py-3 text-sm font-bold text-zinc-950'>Logout</button>
           ):(
-            <NavLink href='/login' label='Login' />
+            <Link href='/login' className='rounded-xl bg-white px-4 py-3 text-center text-sm font-bold text-zinc-950'>Login</Link>
           )}
-          <X onClick={() => setMenuOpen(false)} className='mt-4 text-white' size={24} />
+          <X onClick={() => setMenuOpen(false)} className='mx-auto mt-2 text-white' size={24} />
         </div>
       ) }
     </div>

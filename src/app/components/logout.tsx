@@ -30,8 +30,8 @@ export function LogoutButton() {
   };
 
   return (
-    <button onClick={logout} className='bg-[#2B2B2B] py-3 px-2 rounded-lg shadow-xl flex-1 cursor-pointer transition-colors duration-200'>
-      <p className='text-md font-bold text-white mb-2'>Logout</p>
+    <button onClick={logout} className='bg-white/[0.08] hover:bg-white/[0.12] py-3 px-2 rounded-2xl border border-white/10 shadow-xl flex-1 cursor-pointer transition-colors duration-200'>
+      <p className='text-md font-bold text-white'>Logout</p>
     </button>
   );
 }

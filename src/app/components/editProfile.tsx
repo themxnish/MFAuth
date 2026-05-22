@@ -82,14 +82,14 @@ export default function EditProfile() {
 
 
     return (
-        <div className='w-full max-w-lg space-y-6 px-4 py-8 flex flex-col items-center justify-center'>
-            <div className='flex flex-row justify-between w-full text-sm'>
+        <div className='w-full max-w-lg space-y-6 px-0 py-8 flex flex-col items-center justify-center'>
+            <div className='flex flex-col gap-2 w-full text-sm sm:flex-row sm:items-center sm:justify-between'>
                 <label className='text-gray-300'>Full Name:</label>
-                <input type="text" placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} className='bg-[#4B4B4B] text-white px-4 py-2 ml-auto w-2/3 rounded-lg shadow-xl' />
+                <input type="text" placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} className='border border-white/10 bg-white/[0.07] text-white px-4 py-3 sm:ml-auto w-full sm:w-2/3 rounded-xl shadow-xl focus:ring-2 focus:ring-emerald-300/50' />
             </div>
-            <div className='flex flex-row justify-between w-full text-sm'>
+            <div className='flex flex-col gap-2 w-full text-sm sm:flex-row sm:justify-between'>
                 <label className='text-gray-300'>Bio:</label>
-                <textarea id="bio" placeholder="Describe yourself" value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className='bg-[#4B4B4B] text-white px-4 py-2 ml-auto w-2/3 rounded-lg shadow-xl resize-none' />
+                <textarea id="bio" placeholder="Describe yourself" value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className='border border-white/10 bg-white/[0.07] text-white px-4 py-3 sm:ml-auto w-full sm:w-2/3 rounded-xl shadow-xl resize-none focus:ring-2 focus:ring-emerald-300/50' />
             </div>
             <div className='flex flex-col justify-between w-full text-sm'>
                 <label className='text-gray-300 mb-2'>Avatar:</label>
@@ -97,14 +97,14 @@ export default function EditProfile() {
             </div>
             <div className='flex flex-row justify-between text-sm w-full'>
                 <label className='text-gray-300'>Reset Password:</label>
-                <button className='bg-[#4B4B4B] px-4 py-2 ml-auto w-1/3 rounded-lg shadow-xl text-sm font-medium text-white'><a href='/reset-password'>Change?</a></button>    
+                <button className='bg-white/[0.08] hover:bg-white/[0.12] px-4 py-2 ml-auto w-1/3 rounded-xl border border-white/10 shadow-xl text-sm font-medium text-white'><a href='/reset-password'>Change?</a></button>    
             </div>
             <div className='flex flex-row justify-between text-sm w-full'>
                 <label className='text-gray-300'>Delete Account:</label>
                 <button onClick={handleDelete} className='bg-red-400/30 px-4 py-2 ml-auto w-1/2 sm:w-1/3 rounded-lg shadow-xl text-sm font-medium text-white'>Danger Zone!!</button>
             </div>
 
-            <button onClick={handleEdit} className='bg-[#4B4B4B] w-full text-white font-semibold px-4 py-2 rounded-lg shadow-xl cursor-pointer'>Save</button>
+            <button onClick={handleEdit} className='bg-emerald-400 w-full text-zinc-950 font-bold px-4 py-3 rounded-xl shadow-xl cursor-pointer hover:bg-emerald-300'>Save</button>
         </div>
     )
 }
