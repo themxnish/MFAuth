@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Card, CardContent } from "./card";
 import { toast } from 'react-hot-toast';
@@ -9,8 +9,28 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string) => void }) {
     const [ files, setFiles ] =  useState<Array<{id: string; file: File; uploading: boolean; progress: number; isDeleting: boolean; error: boolean; objectUrl: string;}>>([]);
+    const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/user/session');
+                const data = await response.json();
+                setAuthenticated(Boolean(data.authenticated));
+            } catch {
+                setAuthenticated(false);
+            }
+        }
+
+        checkAuth();
+    }, []);
 
     async function uploadFile(file: File) {
+        if (authenticated === false) {
+            toast.error('Please sign in before uploading files.');
+            return;
+        }
+
         setFiles((prevFiles) => prevFiles.map((f) => 
             f.file === file ? { ...f, uploading: true } : f
         ));
@@ -27,7 +47,9 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
            });
 
             if (!response.ok) {
-                toast.error("Failed to get presigned URL");
+                const data = await response.json().catch(() => null);
+                const message = data?.error || 'Failed to get presigned URL';
+                toast.error(response.status === 401 ? 'Please sign in to upload files.' : message);
 
                 setFiles((prevFiles) => prevFiles.map((f) => 
                     f.file === file ? { ...f, uploading: false, progress: 0, error: true } : f
@@ -76,6 +98,11 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
     }
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
+        if (authenticated === false) {
+            toast.error('Please sign in before uploading files.');
+            return;
+        }
+
         if(acceptedFiles && acceptedFiles.length) {
             setFiles((prevFiles) => [
                 ...prevFiles,
@@ -91,8 +118,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
             ]);
         }
         acceptedFiles.forEach(uploadFile);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [authenticated, uploadFile]);
 
     const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
         if (fileRejections && fileRejections.length > 0) {
@@ -115,6 +141,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         onDropRejected,
+        disabled: authenticated !== true,
         maxFiles: 5,
         maxSize: 1024 * 1024 * 5,
         accept: {
@@ -132,12 +159,22 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
 
                 <CardContent className="flex flex-col items-center justify-center h-full w-full">
                     <input {...getInputProps()} />
-                    {isDragActive ? (
+                    {authenticated === false ? (
+                        <div className="flex flex-col items-center justify-center gap-y-3 text-center px-4">
+                            <p className="text-sm text-gray-300">You must be signed in to upload files.</p>
+                            <p className="text-xs text-gray-400">Please log in, then return to attach evidence.</p>
+                        </div>
+                    ) : authenticated === null ? (
+                        <div className="flex flex-col items-center justify-center gap-y-3 text-center px-4">
+                            <p className="text-sm text-gray-300">Checking sign-in status...</p>
+                            <p className="text-xs text-gray-400">This may take a moment.</p>
+                        </div>
+                    ) : isDragActive ? (
                         <p>Drop the files here ...</p> 
                     ) : ( 
                         <div className="flex flex-col items-center justify-center gap-y-3">
                             <p>Drag and drop some files here, or click to select files</p>
-                            <button className="bg-emerald-400 text-zinc-950 font-semibold py-2 px-4 rounded-xl shadow-xl flex-1 cursor-pointer">Select files</button>
+                            <button type="button" className="bg-emerald-400 text-zinc-950 font-semibold py-2 px-4 rounded-xl shadow-xl flex-1 cursor-pointer">Select files</button>
                         </div>
                     )}
                 </CardContent>

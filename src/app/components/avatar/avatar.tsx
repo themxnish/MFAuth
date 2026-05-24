@@ -5,9 +5,11 @@ import toast from 'react-hot-toast';
 import NiceAvatar, { AvatarFullConfig } from 'react-nice-avatar';
 import { avatarPresets } from '@/lib/avatarPresets';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function AvatarSelector() {
   const [ open, setOpen ] = useState(false);
+  const router = useRouter();
 
   const handleBlock = () => {
     setOpen((prev) => !prev);
@@ -24,7 +26,7 @@ export default function AvatarSelector() {
         body: JSON.stringify({ avatar }),
       });
       if (response.ok){
-        window.location.reload();
+        router.refresh();
       } else toast.error('Failed to add avatar');
     } catch (error) {
       toast.error('Error adding avatar');

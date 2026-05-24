@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         });
     
         if (!user) {
-            return NextResponse.json({ message: "User not found" }, { status: 404 });
+            return NextResponse.json({ message: "User not found, please sign in" }, { status: 404 });
         }
 
         if( !incidentType || !location || !datetime || !description) {

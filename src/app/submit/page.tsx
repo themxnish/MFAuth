@@ -36,9 +36,7 @@ export default function Submit() {
       if (response.ok) {
         toast.success('Evidence submission successful');
         setUploadedKeys([]);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+        setData({ incident_type: '', location: '', datetime: '', description: '', comments: '' });
       } else {
         const { message } = await response.json();
         toast.error(message);

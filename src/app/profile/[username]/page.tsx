@@ -6,7 +6,6 @@ import { LogoutButton } from "@/app/components/logout";
 import { EditProfileButton } from "@/app/components/editProfileButton";
 import { db } from "@/lib/db";
 import ProfileAvatar from "@/app/components/avatar/profileAvatar";
-import AvatarSelector from "@/app/components/avatar/avatar";
 
 export default async function ProfilePage() {
   const user = await getUserFromToken();
@@ -87,8 +86,6 @@ export default async function ProfilePage() {
             <h2 className='text-md font-semibold text-white mb-2'>2FA Authentication Status</h2>
             {user.isVerified ? <p className='text-green-400'>Enabled</p> : <p className='text-red-400'>Disabled</p>}
           </div>
-
-          <AvatarSelector />
 
           <div className=' flex flex-row gap-4 text-center justify-between items-center'>
             <EditProfileButton username={user.username} />

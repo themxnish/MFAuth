@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
+import toast from 'react-hot-toast';
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
@@ -11,8 +12,10 @@ export async function middleware(request: NextRequest) {
 
     if(isPublicPath && token) {
         return NextResponse.redirect(new URL('/', request.nextUrl));
-    } else if (!isPublicPath && !token && !isResetPath) {
-        return NextResponse.redirect(new URL('/login', request.nextUrl));
+    }
+
+    if (isEmailPath && !token){
+        return NextResponse.redirect(new URL('/', request.nextUrl));
     }
 
     if (path.startsWith('/profile/')) {

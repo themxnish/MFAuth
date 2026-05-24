@@ -9,39 +9,28 @@ import { toast } from 'react-hot-toast';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const hiddenPaths = ['/login', '/register'];
   const [ menuOpen, setMenuOpen ] = useState(false);
   const router = useRouter();
   const [ authenticated, setAuthenticated ] = useState<boolean | null>(null);
   const [ user, setUser ] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const response = await fetch('/api/user/session');
+    const getSession = async () => {
+      const response = await fetch('/api/user/session', { cache: 'no-store' });
       const data = await response.json();
-      setAuthenticated(data.authenticated);
+      setAuthenticated(Boolean(data.authenticated));
+      setUser(data?.user?.username ?? null);
     }
-    checkAuth();
-  });
-
-  useEffect(() => {
-    const getUser = async () => {
-      const response = await fetch('/api/user/session');
-      const data = await response.json();
-      if(data?.user?.username){
-        setUser(data.user.username);
-      }
-    }
-    getUser();
-  }, []);
+    getSession();
+  }, [pathname]);
   
   const redirectToProfile = () => {
     if (user) {
       router.push(`/profile/${user}`);
+    } else {
+      toast.error('Login to view your profile');
     }
   };
-
-  if (hiddenPaths.includes(pathname)) return null;
 
   const NavLink = ({ href, label }: { href: string; label: string }) => (
     <Link href={href} className={`text-sm font-semibold ${pathname === href ? 'text-emerald-300' : 'text-gray-200 hover:text-white'}`}>
@@ -53,13 +42,15 @@ export default function Navbar() {
     const confirmLogout = confirm('Are you sure you want to logout?');
     if (!confirmLogout) return;
     try {
-        const response = await fetch('/api/user/logout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      const response = await fetch('/api/user/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
       });
       if (response.ok) {
+        setAuthenticated(false);
+        setUser(null);
         toast.success('User logged out');
         router.push('/login');
       } else {
@@ -103,7 +94,7 @@ export default function Navbar() {
       { menuOpen && (
         <div onClick={() => setMenuOpen(false)} className='absolute left-0 top-[4.35rem] grid w-full gap-2 rounded-2xl border border-white/10 bg-black p-3 shadow-2xl shadow-black/60 md:hidden'>
           <Link href='/' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Home</Link>
-          <Link href={`/profile/${user}`} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === `/profile/${user}` ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Profile</Link>
+          <Link onClick={redirectToProfile} href={`/profile/${user}`} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === `/profile/${user}` ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Profile</Link>
           <Link href='/activity' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/activity' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>User Activity</Link>
           <Link href='/submit' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/submit' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Submit Evidence</Link>
           { authenticated ? (

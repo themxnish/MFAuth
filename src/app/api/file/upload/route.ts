@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { getUserFromToken } from "@/lib/auth";
 
 const uploadSchema = z.object({
     fileName: z.string(),
@@ -13,6 +14,11 @@ const uploadSchema = z.object({
 
 export async function POST(req: Request) {
     try {
+        const user = await getUserFromToken();
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized. Please sign in to upload files." }, { status: 401 });
+        }
+
         const body = await req.json();
 
         const validated = uploadSchema.safeParse(body);

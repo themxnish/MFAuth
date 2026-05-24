@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock, MapPin, Globe, Terminal, Wifi } from "lucide-react";
+import { toast } from 'react-hot-toast';
 
 interface Log {
     id: number;
@@ -24,8 +25,12 @@ export default function Activity() {
         const fetchLogs = async () => {
             const response = await fetch('/api/profile/activity');
             const data = await response.json();
-            setLogs(data.logs);
-            setCurrentPage(1);
+            if (response.ok) {
+                setLogs(data.logs);
+                setCurrentPage(1);
+            } else {
+                toast.error(data.message);
+            }
         }
         fetchLogs();
     }, [])

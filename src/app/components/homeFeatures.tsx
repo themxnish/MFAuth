@@ -11,7 +11,11 @@ export default function HomeFeatures() {
     const checkVerification = async () => {
       const response = await fetch('/api/user/session');
       const data = await response.json();
-      setVerified(Boolean(data?.user?.isVerified));
+      if (response.ok) {
+        setVerified(Boolean(data?.user?.isVerified));
+      } else {
+        setVerified(false);
+      }
     };
     checkVerification();
   }, []);

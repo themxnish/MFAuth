@@ -44,7 +44,8 @@ export async function POST(req: Request) {
             data: {
                 username: username,
                 email: email,
-                password: hashedPassword
+                password: hashedPassword,
+                avatar: JSON.stringify({ sex: 'man', faceColor: '#F9C9A0', earSize: 'small', hairColor: '#000', hairStyle: 'thick', hatColor: '#F4D150', hatStyle: 'none', eyeStyle: 'circle', glassesStyle: 'none', noseStyle: 'short', mouthStyle: 'smile', shirtStyle: 'short', shirtColor: '#6BD9E9', bgColor: '#FFEDEF', isGradient: true }),
             }
         })
 

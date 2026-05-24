@@ -11,15 +11,17 @@ export default function WelcomeText() {
                     'Content-Type': 'application/json',
                 },
             });
-            
+            setUsername('');
             if (response.ok) {
                 const data = await response.json();
-                setUsername(data.user.username);
+                if (data.user && data.user.username) {
+                    setUsername(data.user.username);
+                }
             }
             return null;
         }
         getUsername();
-    })
+    }, [])
     return (
         <div className='py-10 flex flex-col items-center text-center'>
             <div className='w-full max-w-3xl'>

@@ -42,7 +42,7 @@ export default function EditProfile() {
 
         if(response.ok) {
             toast.success('Profile updated successfully');
-            window.location.reload();
+            router.refresh();
         } else {
             toast.error(data.message);
         }

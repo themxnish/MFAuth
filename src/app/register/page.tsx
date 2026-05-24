@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, UserPlus } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
@@ -52,58 +52,74 @@ export default function Register() {
     }
 
     return (
-        <div className='min-h-screen flex items-center justify-center px-4'>
-            <div className='text-white w-full max-w-md p-8'>
-                <h1 className='text-3xl font-bold mt-2 mb-10 text-center'>Signup to MFauth</h1>
-                <form onSubmit={onSubmit} className='space-y-4'>
-                    <input className='w-full px-4 py-3 bg-[#2a2a2a] rounded-md focus:outline-auto focus:ring-2 focus:ring-white' type='text' name='username' placeholder='Username' value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} />
-                    <input className='w-full px-4 py-3 bg-[#2a2a2a] rounded-md focus:outline-auto focus:ring-2 focus:ring-white' type='email' name='email' placeholder='Email' value={user.email} onChange={e => setUser({ ...user, email: e.target.value })} />
-
-                    <div className='relative'>
-                        <input className='w-full px-4 py-3 bg-[#2a2a2a] rounded-md focus:outline-auto focus:ring-2 focus:ring-white' type={showPassword ? 'text' : 'password'} name='password' placeholder='Password' value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} />
-                        <button type='button' onClick={() => setShowPassword(prev => !prev)} className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white focus:outline-none'>
-                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                        </button>
+        <div className='flex items-center justify-center px-4 py-5'>
+            <div className='w-full max-w-xl rounded-3xl border border-white/10 bg-zinc-950/70 p-6 text-white shadow-2xl shadow-black/30 backdrop-blur sm:p-8'>
+                <div className='mb-3 flex flex-col items-center text-center'>
+                    <div className='mb-2 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-200 ring-1 ring-emerald-300/20'>
+                        <ShieldCheck className='h-5 w-5' />
                     </div>
+                    <p className='text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300'>Secure signup</p>
+                    <h1 className='mt-2 text-3xl font-black tracking-tight text-white'>Signup to MFauth</h1>
+                    <p className='mt-1 text-sm leading-6 text-gray-400'>Create your protected workspace account.</p>
+                </div>
+
+                <form onSubmit={onSubmit} className='space-y-4'>
+                    <label className='block'>
+                        <span className='text-sm font-medium text-gray-300'>Username</span>
+                        <input className='mt-1 w-full rounded-xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-emerald-300/50' type='text' name='username' placeholder='Username' value={user.username} onChange={e => setUser({ ...user, username: e.target.value })} />
+                    </label>
+
+                    <label className='block'>
+                        <span className='text-sm font-medium text-gray-300'>Email</span>
+                        <input className='mt-1 w-full rounded-xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-emerald-300/50' type='email' name='email' placeholder='abc@gmail.com' value={user.email} onChange={e => setUser({ ...user, email: e.target.value })} />
+                    </label>
+
+                    <label className='block'>
+                        <span className='text-sm font-medium text-gray-300'>Password</span>
+                        <div className='relative mt-1'>
+                            <input className='w-full rounded-xl border border-white/10 bg-white/[0.07] px-4 py-3 pr-11 text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-emerald-300/50' type={showPassword ? 'text' : 'password'} name='password' placeholder='Password' value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} />
+                            <button type='button' onClick={() => setShowPassword(prev => !prev)} className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white focus:outline-none'>
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
+                    </label>
                     
-                    <button className='w-full px-4 py-3 bg-gray-200 text-black font-medium rounded-md hover:bg-white mt-8' type="submit">Signup</button>
+                    <button className='flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-4 py-3 font-bold text-zinc-950 hover:bg-emerald-300' type="submit">
+                        <UserPlus className='h-4 w-4' />
+                        Signup
+                    </button>
                 </form>
 
-                <br />
-                <div className='flex items-center my-6'>
-                    <hr className='flex-grow border-gray-500' />
+                <div className='my-6 flex items-center'>
+                    <hr className='flex-grow border-white/10' />
                     <span className='px-4 text-sm text-gray-500 whitespace-nowrap'>
                         Or register with
                     </span>
-                    <hr className='flex-grow border-gray-500' />
+                    <hr className='flex-grow border-white/10' />
                 </div>
 
-                <div className='flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 mt-4'>
-                    <div className='w-full sm:w-1/2 px-4 py-3 rounded-lg shadow-xl bg-[#3a3a3a] flex items-center justify-center'>
-                        <a href="/api/auth/oauth/github/login" className='text-white font-medium flex items-center space-x-2'>
+                <div className='grid gap-2 sm:grid-cols-2'>
+                    <a href="/api/auth/oauth/github/login" className='flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 font-semibold text-white shadow-xl hover:bg-white/[0.1]'>
                         <FaGithub size={22} />
                         <span>GitHub</span>
-                        </a>
-                    </div>
+                    </a>
 
-                    <div className='w-full sm:w-1/2 px-4 py-3 rounded-lg shadow-xl bg-[#3a3a3a] flex items-center justify-center'>
-                        <a href="/api/auth/oauth/google/login" className='text-white font-medium flex items-center space-x-2'>
+                    <a href="/api/auth/oauth/google/login" className='flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 font-semibold text-white shadow-xl hover:bg-white/[0.1]'>
                         <FcGoogle size={22} />
                         <span>Google</span>
-                        </a>
-                    </div>
+                    </a>
                 </div>
 
-                <p className='text-sm text-center text-gray-500 mt-4 mb-3 mt-2'>
+                <p className='mt-5 text-center text-sm text-gray-400'>
                     Already have an account?{' '}
-                    <Link className='text-white underline' href="/login">Login</Link>
+                    <Link className='font-semibold text-emerald-300 hover:text-emerald-200' href="/login">Login</Link>
                 </p>
 
-                <p className='text-xs text-center text-gray-500 mt-4'>
-                    By signing up, you agree to our {' '}
-                    <Link className='text-white underline' href="/terms"> Terms of Service</Link> 
-                    {' '} and {' '} 
-                    <Link className='text-white underline' href="/privacy"> Privacy Policy</Link>.
+                <p className='mt-4 text-center text-xs leading-5 text-gray-500'>
+                    By signing up, you agree to our{' '}
+                    <Link className='text-gray-300 hover:text-white' href="/terms">Terms of Service</Link> 
+                    {' '}and{' '} 
+                    <Link className='text-gray-300 hover:text-white' href="/privacy">Privacy Policy</Link>.
                 </p>
             </div>
         </div>

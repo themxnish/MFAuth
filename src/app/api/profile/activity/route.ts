@@ -5,7 +5,7 @@ import { getUserFromToken } from "@/lib/auth";
 export async function GET() {
   const user = await getUserFromToken();
   if (!user) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ message: "You must be logged in to view your activity" }, { status: 401 });
   } else if (!user.id) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
