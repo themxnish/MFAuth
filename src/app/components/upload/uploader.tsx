@@ -25,7 +25,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
         checkAuth();
     }, []);
 
-    async function uploadFile(file: File) {
+    const uploadFile = useCallback(async (file: File) => {
         if (authenticated === false) {
             toast.error('Please sign in before uploading files.');
             return;
@@ -95,7 +95,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
                 f.file === file ? { ...f, uploading: false, progress: 0, error: true } : f
             ));
         }
-    }
+    }, [authenticated, onUploadComplete]);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (authenticated === false) {

@@ -1,12 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
-import toast from 'react-hot-toast';
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
     const isPublicPath = path === '/register' || path === '/login';
     const isEmailPath = path === '/verify-email';
-    const isResetPath = path === '/reset-password';
 
     const token = request.cookies.get('token')?.value || '';
 
