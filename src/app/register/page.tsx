@@ -6,6 +6,7 @@ import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import TurnstileWidget from '../components/turnstile';
 
 export default function Register() {
     const [user, setUser] = React.useState({
@@ -14,10 +15,15 @@ export default function Register() {
         password: '',
     });
     const [ showPassword, setShowPassword ] = React.useState(false);
+    const [ captchaToken, setCaptchaToken ] = React.useState('');
     const router = useRouter();
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!captchaToken) {
+            toast.error('Please complete the captcha');
+            return;
+        }
         try {
             const response = await fetch('/api/user/signup', {
                 method: 'POST',
@@ -28,6 +34,7 @@ export default function Register() {
                     username: user.username,
                     email: user.email,
                     password: user.password,
+                    captchaToken,
                 }),
             })
 
@@ -84,6 +91,10 @@ export default function Register() {
                         </div>
                     </label>
                     
+                    <div className='mt-3 flex items-center justify-center'>
+                        <TurnstileWidget onVerify={(token: string) => setCaptchaToken(token)} />
+                    </div>
+
                     <button className='flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-400 px-4 py-3 font-bold text-zinc-950 hover:bg-emerald-300' type="submit">
                         <UserPlus className='h-4 w-4' />
                         Signup

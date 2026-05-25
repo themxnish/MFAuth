@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Uploader } from "../components/upload/uploader";
 import toast from "react-hot-toast";
+import TurnstileWidget from '../components/turnstile';
 
 export default function Submit() {
   const [ data, setData ] = useState({
@@ -12,6 +13,7 @@ export default function Submit() {
     comments: '',
   });
   const [uploadedKeys, setUploadedKeys] = useState<string[]>([]);
+  const [ captchaToken, setCaptchaToken ] = useState('');
 
   function handleUploaded(key: string) {
     setUploadedKeys((prev) => [...prev, key]);
@@ -19,6 +21,10 @@ export default function Submit() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaToken) {
+      toast.error('Please complete the captcha');
+      return;
+    }
     try {
       const response = await fetch('/api/file/submit', {
         method: 'POST',
@@ -30,6 +36,7 @@ export default function Submit() {
           datetime: data.datetime,
           description: data.description,
           comments: data.comments,
+          captchaToken: captchaToken,
         }),
       });
 
@@ -98,7 +105,12 @@ export default function Submit() {
         </label>
 
         <div className="flex justify-center">
-          <button type="button" onClick={onSubmit} className="bg-emerald-400 w-full max-w-sm mt-4 hover:bg-emerald-300 cursor-pointer text-zinc-950 font-bold py-3 px-4 rounded-xl">Submit</button>
+          <div className='w-full max-w-sm'>
+            <div className='flex items-center justify-center'>
+              <TurnstileWidget onVerify={(token: string) => setCaptchaToken(token)} />
+            </div>
+            <button type="button" onClick={onSubmit} className="bg-emerald-400 w-full mt-4 hover:bg-emerald-300 cursor-pointer text-zinc-950 font-bold py-3 px-4 rounded-xl">Submit</button>
+          </div>
         </div>
 
         <p className="text-xs text-center text-gray-500">By submitting this form, you acknowledge that you have read and agree to the terms and conditions of our evidence submission policy.</p>
