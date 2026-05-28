@@ -69,12 +69,12 @@ export default function Submit() {
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Type of Incident*</span>
           <select name="incident_type" required className="w-full border border-white/10 bg-white/[0.07] text-sm mt-1 p-3 rounded-xl focus:ring-2 focus:ring-emerald-300/50" value={data.incident_type} onChange={e => setData({ ...data, incident_type: e.target.value })}>
-            <option value="">Select...</option>
-            <option value="crime">Crime</option>
-            <option value="corruption">Corruption</option>
-            <option value="safety_violation">Safety Violation</option>
-            <option value="harassment">Harassment</option>
-            <option value="other">Other</option>
+            <option className="bg-zinc-950/70 text-white" value="">Select...</option>
+            <option className="bg-zinc-950/70 text-white" value="crime">Crime</option>
+            <option className="bg-zinc-950/70 text-white" value="corruption">Corruption</option>
+            <option className="bg-zinc-950/70 text-white" value="safety_violation">Safety Violation</option>
+            <option className="bg-zinc-950/70 text-white" value="harassment">Harassment</option>
+            <option className="bg-zinc-950/70 text-white" value="other">Other</option>
           </select>
         </label>
 
@@ -95,7 +95,7 @@ export default function Submit() {
 
         <label className="block mb-3">
           <span className="font-medium text-gray-300 text-sm">Upload Evidence (Images, Documents)</span>
-          <p className="text-xs text-gray-500 mb-2">Accepted formats: JPG, PNG, DOC, PNG, PDF. Max total size file: 5MB.</p>
+          <p className="text-xs text-gray-500 mb-2">Accepted formats: JPG, PNG, PDF, DOC, DOCX. Files are encrypted before upload. Max file size: 5MB.</p>
         </label>
         <Uploader onUploadComplete={handleUploaded} />
 

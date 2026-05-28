@@ -3,6 +3,7 @@ import { emailExporter } from "@/lib/mail/otp";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { getUserFromToken } from "@/lib/auth";
+import { eventLog } from "@/lib/logs/logEvent";
 
 export async function POST(req: Request) {
     const body = await req.json();
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
                 isVerified: false,
             },
         })
+        await eventLog(Number(user.id), "MFA Disabled");
         await emailExporter(email, plainOtp);
 
         return NextResponse.json({ message: "Verification mail sent successfully" }, { status: 200 });

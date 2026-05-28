@@ -7,6 +7,25 @@ import { toast } from 'react-hot-toast';
 import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from 'uuid';
 
+const accept = {
+    "image/jpeg": [".jpeg", ".jpg"],
+    "image/png": [".png"],
+    "application/pdf": [".pdf"],
+    "application/msword": [".doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+};
+
+async function encryptFile(file: File) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt"]);
+    const rawKey = new Uint8Array(await crypto.subtle.exportKey("raw", key));
+    const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, await file.arrayBuffer());
+    return {
+        blob: new Blob([iv, new Uint8Array(encrypted)], { type: "application/octet-stream" }),
+        key: btoa(String.fromCharCode(...rawKey)),
+    };
+}
+
 export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string) => void }) {
     const [ files, setFiles ] =  useState<Array<{id: string; file: File; uploading: boolean; progress: number; isDeleting: boolean; error: boolean; objectUrl: string;}>>([]);
     const [authenticated, setAuthenticated] = useState<boolean | null>(null);
@@ -36,13 +55,14 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
         ));
 
         try {
+           const encryptedFile = await encryptFile(file);
            const response = await fetch('/api/file/upload', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}, 
             body: JSON.stringify({
                 fileName: file.name,
                 contentType: file.type,
-                size: file.size,
+                size: encryptedFile.blob.size,
             }),
            });
 
@@ -75,7 +95,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
                             f.file === file ? { ...f, progress: 100, uploading: false, error: false } : f
                         ));
                         toast.success('File uploaded successfully');
-                        onUploadComplete(key);
+                        onUploadComplete(`${key}#${encryptedFile.key}`);
                         resolve(true);
                     } else {
                         reject(new Error("Upload failed: " + xhr.status));
@@ -85,8 +105,8 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
                     reject(new Error("Upload error"));
                 }
                 xhr.open("PUT", presignedUrl);
-                xhr.setRequestHeader("Content-Type", file.type);
-                xhr.send(file);
+                xhr.setRequestHeader("Content-Type", encryptedFile.blob.type);
+                xhr.send(encryptedFile.blob);
             });
 
         } catch (error) {
@@ -132,8 +152,10 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
 
             if (manyFiles) {
                 toast.error("You can upload a maximum of 5 files at a time.");
-            } else if (largeFile) {
+        } else if (largeFile) {
                 toast.error("You can upload a maximum of 5 MB per file.");
+            } else {
+                toast.error("Only JPG, PNG, PDF, DOC, and DOCX files are allowed.");
             }
         }
     }, []); 
@@ -144,11 +166,7 @@ export function Uploader({ onUploadComplete }: { onUploadComplete: (key: string)
         disabled: authenticated !== true,
         maxFiles: 5,
         maxSize: 1024 * 1024 * 5,
-        accept: {
-            "image/*": [".jpeg", ".jpg", ".png"],
-            "application/pdf": [".pdf"],
-            "application/msword": [".doc", ".docx"],
-        }
+        accept,
     });
 
     return (

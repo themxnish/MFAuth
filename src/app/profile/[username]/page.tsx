@@ -6,6 +6,7 @@ import { LogoutButton } from "@/app/components/logout";
 import { EditProfileButton } from "@/app/components/editProfileButton";
 import { db } from "@/lib/db";
 import ProfileAvatar from "@/app/components/avatar/profileAvatar";
+import { ProfileSubmissions } from "@/app/components/profileSubmissions";
 
 export default async function ProfilePage() {
   const user = await getUserFromToken();
@@ -22,6 +23,17 @@ export default async function ProfilePage() {
       createdAt: true,
       updatedAt: true,
       avatar: true,
+      evidenceSubmissions: {
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          incidentType: true,
+          location: true,
+          datetime: true,
+          description: true,
+          createdAt: true,
+        },
+      },
     },
   });
   
@@ -86,6 +98,8 @@ export default async function ProfilePage() {
             <h2 className='text-md font-semibold text-white mb-2'>2FA Authentication Status</h2>
             {user.isVerified ? <p className='text-green-400'>Enabled</p> : <p className='text-red-400'>Disabled</p>}
           </div>
+
+          <ProfileSubmissions submissions={data?.evidenceSubmissions ?? []} />
 
           <div className=' flex flex-row gap-4 text-center justify-between items-center'>
             <EditProfileButton username={user.username} />

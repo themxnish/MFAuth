@@ -5,11 +5,21 @@ import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { getUserFromToken } from "@/lib/auth";
+import { eventLog } from "@/lib/logs/logEvent";
+
+const allowedTypes = new Set([
+    "image/jpeg",
+    "image/png",
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]);
+const allowedExts = [".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx"];
 
 const uploadSchema = z.object({
     fileName: z.string(),
     contentType: z.string(),
-    size: z.number(),
+    size: z.number().positive().max(1024 * 1024 * 5 + 28),
 });
 
 export async function POST(req: Request) {
@@ -28,13 +38,20 @@ export async function POST(req: Request) {
         }
 
         const { fileName, contentType, size } = validated.data;
+        const lowerName = fileName.toLowerCase();
+        const isAllowed = allowedTypes.has(contentType) && allowedExts.some(ext => lowerName.endsWith(ext));
 
-        const uniquekey = `${uuidv4() }-${fileName}`;
+        if (!isAllowed || lowerName.endsWith(".zip")) {
+            await eventLog(Number(user.id), "Suspicious Upload Attempt");
+            return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
+        }
+
+        const uniquekey = `${uuidv4() }-${fileName}.enc`;
 
         const command = new PutObjectCommand({
             Bucket: process.env.S3_BUCKET_NAME!,
             Key: uniquekey,
-            ContentType: contentType,
+            ContentType: "application/octet-stream",
             ContentLength: size,
         });
 

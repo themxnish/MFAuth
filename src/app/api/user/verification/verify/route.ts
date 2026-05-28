@@ -36,6 +36,7 @@ export async function POST(req: Request) {
         });
 
         await eventLog(user.id, 'Email verified');
+        await eventLog(user.id, 'MFA Enabled');
 
         return NextResponse.json({ message: "OTP Verification is successful" }, { status: 200 });
 

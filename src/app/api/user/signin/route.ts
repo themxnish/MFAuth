@@ -18,6 +18,8 @@ export async function POST(req: Request) {
 
         const validPassword = await bcrypt.compare(password, user.password);
         if(!validPassword) {
+            await authLog(user.id, "Login Failed");
+            await authLog(user.id, "Suspicious Login Attempt");
             return NextResponse.json({ user: null, message: "incorrect password, please try again" }, { status: 401 });
         }
 
@@ -41,7 +43,7 @@ export async function POST(req: Request) {
             httpOnly: true,
         })
 
-        await authLog(user.id, "Logged In");
+        await authLog(user.id, "Login Success");
         return response;
     } catch (error) {
         console.error("Error signing in user:", error);

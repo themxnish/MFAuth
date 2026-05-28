@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
   const profile = await getProfile(accessToken);
 
-  const user = await findOrCreateUser(profile, accessToken);
+  const { user, linked } = await findOrCreateUser(profile, accessToken);
 
   const token = jwt.sign({
     id: user.id,
@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  if (linked) await authLog(user.id, 'Google OAuth Linked');
   await authLog(user.id, 'Google OAuth Login');
 
   return response;
@@ -56,7 +57,6 @@ async function getAccessToken(code: string) {
   });
 
   const data = await response.json();
-  console.log('Google token response:', data.access_token);
   
   return data.access_token;
 }
@@ -81,7 +81,7 @@ async function findOrCreateUser(profile: any, accessToken: string) {
     include: { user: true },
   });
 
-  if (existingAccount) return existingAccount.user;
+  if (existingAccount) return { user: existingAccount.user, linked: false };
 
   const email = profile.email ?? `${profile.id}@google.local`;
   let user = await db.user.findUnique({ where: { email } });
@@ -108,5 +108,5 @@ async function findOrCreateUser(profile: any, accessToken: string) {
     },
   });
 
-  return user;
+  return { user, linked: true };
 }

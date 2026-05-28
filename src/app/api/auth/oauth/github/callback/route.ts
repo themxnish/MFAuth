@@ -27,8 +27,6 @@ export async function GET(req: NextRequest) {
   });
 
   const tokenData = await tokenResponse.json();
-  console.log('GitHub token response:', tokenData);
-
   const accessToken = tokenData.access_token;
   if (!accessToken) {
     return NextResponse.json({ message: 'Token exchange failed' }, { status: 401 });
@@ -51,7 +49,7 @@ export async function GET(req: NextRequest) {
     include: { user: true },
   });
 
-  let user;
+  let user, linked = false;
 
   if (existingAccount) {
     user = existingAccount.user;
@@ -80,6 +78,7 @@ export async function GET(req: NextRequest) {
         scope: 'read:user user:email',
       },
     });
+    linked = true;
   }
 
   const token = jwt.sign(
@@ -106,6 +105,7 @@ export async function GET(req: NextRequest) {
     maxAge: 60 * 60 * 24 * 7, 
   });
 
+  if (linked) await authLog(user.id, 'Github OAuth Linked');
   await authLog(user.id, 'Github OAuth Login');
 
   return response;

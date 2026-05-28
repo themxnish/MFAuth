@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { getUserFromToken } from "@/lib/auth";
+import { eventLog } from "@/lib/logs/logEvent";
 
 export async function DELETE(req: Request) {
     const body = await req.json();
@@ -12,6 +13,7 @@ export async function DELETE(req: Request) {
     }
 
     if (sessionUser.username !== username) {
+        await eventLog(Number(sessionUser.id), "Unauthorized Account Delete Attempt");
         return NextResponse.json({ message: "Unauthorized user" }, { status: 401 });
     }
 
