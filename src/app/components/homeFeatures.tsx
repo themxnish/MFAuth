@@ -24,6 +24,7 @@ export default function HomeFeatures() {
     { href: '/verify-email', icon: verified ? CheckCircle2 : ShieldCheck, title: 'Verify Identity', text: verified ? 'Your email is verified and identity is secured.' : 'Secure your account with email verification.', active: verified },
     { href: '/submit', icon: FileUp, title: 'Submit Evidence', text: 'Upload incident details and files safely.' },
     { href: '/activity', icon: Activity, title: 'Activity Logs', text: 'Review sign-ins and account activity.' },
+    { href: '/ip-check', icon: FileUp, title: 'IP Check', text: 'Check the reputation of an IP address.' },
   ];
 
   return (

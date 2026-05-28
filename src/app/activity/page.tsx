@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Clock, MapPin, Globe, Terminal, Wifi } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, MapPin, Globe, Terminal, Wifi, Trash2, Loader2 } from "lucide-react";
 import { toast } from 'react-hot-toast';
 
 interface Log {
@@ -16,24 +16,87 @@ interface Log {
 export default function Activity() {
     const [ logs, setLogs ] = useState([] as Log[]);
     const [ currentPage, setCurrentPage ] = useState(1);
+    const [ deletingLogId, setDeletingLogId ] = useState<number | null>(null);
+    const [ isClearing, setIsClearing ] = useState(false);
     const logsPerPage = 5;
     const totalPages = Math.ceil(logs.length / logsPerPage);
     const startIndex = (currentPage - 1) * logsPerPage;
     const currentLogs = logs.slice(startIndex, startIndex + logsPerPage);
 
+    const fetchLogs = async () => {
+        const response = await fetch('/api/profile/activity');
+        const data = await response.json();
+        if (response.ok) {
+            setLogs(data.logs);
+            setCurrentPage(1);
+        } else {
+            toast.error(data.message);
+        }
+    }
+
     useEffect(() => {
-        const fetchLogs = async () => {
-            const response = await fetch('/api/profile/activity');
+        fetchLogs();
+    }, [])
+
+    useEffect(() => {
+        if (currentPage > 1 && currentPage > totalPages) {
+            setCurrentPage(totalPages || 1);
+        }
+    }, [currentPage, totalPages])
+
+    const deleteLog = async (logId: number) => {
+        const confirmed = confirm('Delete this activity log?');
+        if (!confirmed) return;
+
+        setDeletingLogId(logId);
+        try {
+            const response = await fetch('/api/profile/activity', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ logId }),
+            });
             const data = await response.json();
+
             if (response.ok) {
-                setLogs(data.logs);
-                setCurrentPage(1);
+                setLogs(prev => prev.filter(log => log.id !== logId));
+                toast.success(data.message);
             } else {
                 toast.error(data.message);
             }
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to delete activity log');
+        } finally {
+            setDeletingLogId(null);
         }
-        fetchLogs();
-    }, [])
+    }
+
+    const clearLogs = async () => {
+        const confirmed = confirm('Delete all of your activity logs? This cannot be undone.');
+        if (!confirmed) return;
+
+        setIsClearing(true);
+        try {
+            const response = await fetch('/api/profile/activity', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                setLogs([]);
+                setCurrentPage(1);
+                toast.success(data.message);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to delete activity logs');
+        } finally {
+            setIsClearing(false);
+        }
+    }
 
     return(
         <div className='mx-auto max-w-6xl p-4'>
@@ -49,6 +112,12 @@ export default function Activity() {
                     <p className='text-gray-400 text-sm text-center'>No activity logs found as of now.</p>
                 ) : (
                     <>
+                    <div className='mb-5 flex justify-end'>
+                        <button type='button' disabled={isClearing} onClick={clearLogs} className='inline-flex items-center gap-2 rounded-xl border border-red-300/20 bg-red-400/15 px-3 py-2 text-sm font-semibold text-red-100 hover:bg-red-400/25 disabled:cursor-not-allowed disabled:opacity-50'>
+                            {isClearing ? <Loader2 className='h-4 w-4 animate-spin' /> : <Trash2 className='h-4 w-4' />}
+                            Clear logs
+                        </button>
+                    </div>
                     {totalPages > 1 && (
                         <div className='mb-6 flex flex-col items-center justify-between gap-3 sm:flex-row'>
                             <p className='text-sm text-gray-400'>
@@ -101,6 +170,10 @@ export default function Activity() {
                             <Clock className='w-4 h-4' />
                             <span className='font-semibold'>Time: </span><p className='text-gray-400 '>{new Date(log.loggedAt).toLocaleString()}</p>
                         </div>
+                        <button type='button' disabled={deletingLogId === log.id || isClearing} onClick={() => deleteLog(log.id)} className='inline-flex items-center justify-center gap-2 rounded-xl border border-red-300/20 bg-red-400/15 px-3 py-2 text-sm font-semibold text-red-100 hover:bg-red-400/25 disabled:cursor-not-allowed disabled:opacity-50'>
+                            {deletingLogId === log.id ? <Loader2 className='h-4 w-4 animate-spin' /> : <Trash2 className='h-4 w-4' />}
+                            Delete
+                        </button>
                     </li>
                     ))}
                     </ul>

@@ -74,6 +74,7 @@ export default function Navbar() {
       <div className='hidden md:flex items-center gap-6'>
         <NavLink href='/' label='Home' />
         <NavLink href='/activity' label='User Activity' />
+        <NavLink href='/ip-check' label='IP Check' />
         <NavLink href='/submit' label='Submit Evidence' />
         <button onClick={redirectToProfile} className='cursor-pointer rounded-full bg-white/10 p-2 hover:bg-white/15'><User className={`w-5 h-5 ${pathname === `/profile/${user}` ? 'text-emerald-300' : 'text-white'}`}/></button>
         { authenticated ?(
@@ -89,13 +90,14 @@ export default function Navbar() {
         <button onClick={() => setMenuOpen(true)} className='p-2'>
           <Menu className='w-6 h-6 text-gray-300' />
         </button>
+        <button onClick={redirectToProfile} className='cursor-pointer rounded-full bg-white/10 p-2 hover:bg-white/15'><User className={`w-5 h-5 ${pathname === `/profile/${user}` ? 'text-emerald-300' : 'text-white'}`}/></button>
       </div>
 
       { menuOpen && (
         <div onClick={() => setMenuOpen(false)} className='absolute left-0 top-[4.35rem] grid w-full gap-2 rounded-2xl border border-white/10 bg-black p-3 shadow-2xl shadow-black/60 md:hidden'>
           <Link href='/' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Home</Link>
-          <Link onClick={redirectToProfile} href={`/profile/${user}`} className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === `/profile/${user}` ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Profile</Link>
           <Link href='/activity' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/activity' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>User Activity</Link>
+          <Link href='/ip-check' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/ip-check' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>IP Check</Link>
           <Link href='/submit' className={`rounded-xl px-4 py-3 text-center text-sm font-semibold ${pathname === '/submit' ? 'bg-emerald-400/15 text-emerald-300' : 'bg-white/[0.06] text-gray-200'}`}>Submit Evidence</Link>
           { authenticated ? (
             <button onClick={logout} className='rounded-xl bg-white px-4 py-3 text-sm font-bold text-zinc-950'>Logout</button>

@@ -4,8 +4,11 @@ import { getUserFromToken } from "@/lib/auth";
 import { eventLog } from "@/lib/logs/logEvent";
 
 export async function DELETE(req: Request) {
-    const body = await req.json();
-    const { username } = body;
+    const body = await req.json().catch(() => ({}));
+    const username = typeof body.username === "string" ? body.username.trim() : "";
+    if (!username) {
+        return NextResponse.json({ message: "Username is required" }, { status: 400 });
+    }
     
     const sessionUser = await getUserFromToken();
     if (!sessionUser) {
@@ -22,8 +25,12 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    await db.account.deleteMany({ where: { userId: user.id } });
-    await db.user.delete({ where: { username } });
+    await db.$transaction([
+        db.account.deleteMany({ where: { userId: user.id } }),
+        db.log.deleteMany({ where: { userId: user.id } }),
+        db.evidence.deleteMany({ where: { userId: user.id } }),
+        db.user.delete({ where: { username } }),
+    ]);
 
     const response = NextResponse.json({ message: "User deleted successfully:(" }, { status: 200 });
     response.cookies.set('token', '', { path: '/', httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 0, expires: new Date(0) });
